@@ -28,7 +28,7 @@
 ;; Set up the themes
 (use-package doom-themes
   :init
-  (load-theme 'doom-opera-light)
+  (load-theme 'doom-one)
   :config
   (doom-themes-org-config)
   (doom-themes-treemacs-config))
@@ -37,6 +37,9 @@
 (use-package awesome-tray
   :load-path "site-lisp/lazycat-collection/awesome-tray"
   :commands awesome-tray-mode
+  :init
+  (setq awesome-tray-mode-line-active-color "#3f444a"
+        awesome-tray-git-update-duration 15)
   :hook (after-init . awesome-tray-mode))
 
 ;; Misc

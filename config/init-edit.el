@@ -46,10 +46,6 @@
 (use-package ace-link
   :bind (("M-g l" . ace-link-addr)))
 
-;; Even jump to chinese characters
-(use-package ace-piyin
-  :hook (after-init . ace-pinyin-global-mode))
-
 ;;; Region Operation
 ;; Expand-region
 (use-package expand-region

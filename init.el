@@ -58,7 +58,7 @@
   (require-init init-chinese)
 
   ;; File-managemnet
-  (require-init init-ranger)
+  (require-init init-dired)
   (require-init init-treemacs)
 
   ;; Applications
