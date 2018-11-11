@@ -4,6 +4,7 @@
   (when (version< emacs-version minver)
     (error "Your Emacs don't support this config, use Emacs %s or above" minver)))
 
+;; Avoid Emacs do GC during the initializing
 (let ((init-time-gc-cons-thresold (* 100 1024 1024))
       (init-time-gc-cons-precentage 0.6)
       (run-time-gc-cons-thresold (* 20 1024 1024))
@@ -29,6 +30,10 @@
   ;; Package management
   (require-init init-package)
 
+  ;; Basic
+  (require-init init-hydra)
+  (require-init init-ivy)
+
   ;; Better editing
   (require-init init-edit)
 
@@ -46,10 +51,6 @@
   (require-init init-org)
   (require-init init-markdown)
 
-  ;; Basic
-  (require-init init-ivy)
-  (require-init init-hydra)
-
   ;; UI
   (require-init init-ui)
 
@@ -57,7 +58,6 @@
   (require-init init-chinese)
 
   ;; File-managemnet
-  (require-init init-dired)
   (require-init init-ranger)
   (require-init init-treemacs)
 
@@ -67,6 +67,4 @@
   (require-init init-gnus)
   (require-init init-emms)
 
-
-  ;; (load custom-file)
   )
