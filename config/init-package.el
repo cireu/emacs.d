@@ -39,9 +39,6 @@
 (eval-when-compile
   (require 'use-package))
 
-;; `use-package' needs it
-(use-package bind-key)
-
 ;; Extensions
 (use-package package-utils
   :init
@@ -53,4 +50,3 @@
   (defalias 'cm/backup-extensions 'elpamr-create-mirror-for-installed))
 
 (provide 'init-package)
-,<

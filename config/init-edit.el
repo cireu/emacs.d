@@ -51,14 +51,6 @@
 (use-package expand-region
   :bind (("C-c v" . er/expand-region)))
 
-(use-package rect
-  :ensure nil
-  :bind (("<C-return>" . rectangle-mark-mode)))
-
-;; Treat the region smartly
-(use-package smart-region
-  :hook (after-init . smart-region-on))
-
 ;;; Miscs
 ;; Use modern regexp for replacement
 (use-package visual-regexp-streoid
