@@ -3,7 +3,7 @@
 ;; Better way to manage key bindings
 (use-package general
   :init
-  (general-evil-setup)
+  (general-evil-setup 'with-shortname-maps)
 
   ;; The global leader
   (general-create-definer l-spc :states '(n v)
@@ -19,12 +19,15 @@
 
 ;; The dark side
 (use-package evil
+  :hook (after-init . evil-mode)
   :init
   (setq evil-want-C-u-scroll t
         evil-want-C-d-scroll t
+        evil-want-C-w-delete t
         evil-want-Y-yank-to-eol t)
-  :hook (after-init . evil-mode)
-  :config
+  (setq evil-symbol-word-search t
+        evil-ex-substitute-global t)
+  :general
   ;; Make Evil not so evil
   (nvmap
     "C-a" 'evil-first-non-blank
@@ -43,21 +46,32 @@
     "C-e" 'end-of-line ; `evil-end-of-line' won't go to the eol correctly
     "C-f" 'forward-char
     "C-b" 'backward-char
+    "C-n" 'next-line
+    "C-p" 'previous-line
     "C-d" 'delete-char
     "C-y" 'yank
-    "C-w" 'kill-region
-    "C-k" 'kill-line
-    )
-  )
+    "C-k" 'kill-line)
 
-(progn
-  (use-package-ensure-elpa 'evil-snipe
-                           '(t)
-                           'nil)
-  (unless
-      (fboundp 'evil-end-of-line)
-    (autoload
-      (function evil-end-of-line)
-      "evil-snipe" nil t))
-  (general-def "C-c f" 'evil-end-of-line :package 'evil-snipe))
+  ;; Rebound Universal arg to "SPC u"
+  (l-spc "u" 'universal-argument))
 
+(use-package evil-snipe
+  ;; Only I want is smart f/F/t/T, `avy' will do the rest of the work
+  :init
+  (setq evil-snipe-scope 'line
+        evil-snipe-repeat-scope 'whole-line)
+  :general
+  (nvmap
+    "f" 'evil-snipe-f
+    "F" 'evil-snipe-F
+    "t" 'evil-snipe-t
+    "T" 'evil-snipe-T))
+
+;; (use-package evil-visualstar
+;;   :hook (evil-after-load . global-evil-visualstar-mode))
+
+;; (use-package evil-nerd-commenter
+;;   :hook
+;;   :general
+;;   (l-spc
+;;     "cl" 'evilnc-comment-or-uncomment-lines))

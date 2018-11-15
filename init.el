@@ -18,56 +18,54 @@
 
 (defmacro load-config! (config)
   "Load the config files"
-  `(load (file-truename (format "~/.emacs.d/config/%s" ,config))))
+  `(load ,(file-truename (format "~/.emacs.d/config/%s" config))))
 
 (let ((file-name-handler-alist nil))
 
-  (eval-when-compile
-    (setq custom-file (concat user-emacs-directory "custome-variables.el"))
-    (if (file-exists-p custom-file) (load custome-file)))
-
-  ;; Without this comment emacs25 add (package-'init-ialize) here
+  (setq custom-file (concat user-emacs-directory "custom.el"))
+  ;; Without this comment emacs25 add (package-initialize) here
   ;; Package management
-  (load-config! 'init-package)
+  (load-config! init-package)
 
   ;; Key-bindings
-  (load-config! 'init-evil)
-  (load-config! 'init-hydra)
+  (load-config! init-evil)
+  (load-config! init-hydra)
 
   ;; Basic
-  (load-config! 'init-ivy)
+  (load-config! init-ivy)
 
   ;; Better editing
-  (load-config! 'init-edit)
+  (load-config! init-edit)
 
   ;; General programming functions
-  (load-config! 'init-progs)
+  (load-config! init-progs)
 
   ;; Programming Language
-  (load-config! 'init-jts)
-  (load-config! 'init-common-lisp)
-  (load-config! 'init-emacs-lisp)
-  (load-config! 'init-python)
+  (load-config! init-jts)
+  (load-config! init-common-lisp)
+  (load-config! init-emacs-lisp)
+  (load-config! init-python)
 
   ;; Markup-language
-  (load-config! 'init-plantuml)
-  (load-config! 'init-org)
-  (load-config! 'init-markdown)
+  (load-config! init-plantuml)
+  (load-config! init-org)
+  (load-config! init-markdown)
 
   ;; UI
-  (load-config! 'init-ui)
+  (load-config! init-ui)
 
   ;; Chinese language support
-  (load-config! 'init-chinese)
+  (load-config! init-chinese)
 
   ;; File-managemnet
-  (load-config! 'init-dired)
-  (load-config! 'init-treemacs)
+  (load-config! init-dired)
+  (load-config! init-treemacs)
 
   ;; Applications
-  (load-config! 'init-wanderlust)
-  (load-config! 'init-edit-server)
-  (load-config! 'init-gnus)
-  (load-config! 'init-emms)
+  (load-config! init-wanderlust)
+  (load-config! init-edit-server)
+  (load-config! init-gnus)
+  (load-config! init-emms)
 
-  )
+  ;; Load custom file
+  (when (file-exists-p custom-file) (load custom-file)))
