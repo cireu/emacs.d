@@ -16,55 +16,58 @@
                                         gc-cons-percentage run-time-gc-cons-precentage)
                                   (add-hook 'focus-out-hook 'garbage-collect))))
 
-(defmacro require-init (config)
+(defmacro load-config! (config)
   "Load the config files"
-  `(load ,(file-truename (format "~/.emacs.d/config/%s" config))))
+  `(load (file-truename (format "~/.emacs.d/config/%s" ,config))))
 
 (let ((file-name-handler-alist nil))
 
-  ;; Avoid the emacs custom-variables system
-  (setq custom-file (concat user-emacs-directory "custome-variables.el"))
-  ;; (load custom-file)
+  (eval-when-compile
+    (setq custom-file (concat user-emacs-directory "custome-variables.el"))
+    (if (file-exists-p custom-file) (load custome-file)))
 
-  ;; Without this comment emacs25 add (package-initialize) here
+  ;; Without this comment emacs25 add (package-'init-ialize) here
   ;; Package management
-  (require-init init-package)
+  (load-config! 'init-package)
+
+  ;; Key-bindings
+  (load-config! 'init-evil)
+  (load-config! 'init-hydra)
 
   ;; Basic
-  (require-init init-hydra)
-  (require-init init-ivy)
+  (load-config! 'init-ivy)
 
   ;; Better editing
-  (require-init init-edit)
+  (load-config! 'init-edit)
 
   ;; General programming functions
-  (require-init init-progs)
+  (load-config! 'init-progs)
 
   ;; Programming Language
-  (require-init init-jts)
-  (require-init init-common-lisp)
-  (require-init init-emacs-lisp)
-  (require-init init-python)
+  (load-config! 'init-jts)
+  (load-config! 'init-common-lisp)
+  (load-config! 'init-emacs-lisp)
+  (load-config! 'init-python)
 
   ;; Markup-language
-  (require-init init-plantuml)
-  (require-init init-org)
-  (require-init init-markdown)
+  (load-config! 'init-plantuml)
+  (load-config! 'init-org)
+  (load-config! 'init-markdown)
 
   ;; UI
-  (require-init init-ui)
+  (load-config! 'init-ui)
 
   ;; Chinese language support
-  (require-init init-chinese)
+  (load-config! 'init-chinese)
 
   ;; File-managemnet
-  (require-init init-dired)
-  (require-init init-treemacs)
+  (load-config! 'init-dired)
+  (load-config! 'init-treemacs)
 
   ;; Applications
-  (require-init init-wanderlust)
-  (require-init init-edit-server)
-  (require-init init-gnus)
-  (require-init init-emms)
+  (load-config! 'init-wanderlust)
+  (load-config! 'init-edit-server)
+  (load-config! 'init-gnus)
+  (load-config! 'init-emms)
 
   )
