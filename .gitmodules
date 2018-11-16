@@ -7,9 +7,6 @@
 [submodule "site-lisp/lazycat-collection/aweshell"]
 	path = site-lisp/lazycat-collection/aweshell
 	url = https://github.com/manateelazycat/aweshell
-[submodule "site-lisp/lazycat-collection/lpy"]
-	path = site-lisp/lazycat-collection/lpy
-	url = https://github.com/abo-abo/lpy
 [submodule "site-lisp/lpy"]
 	path = site-lisp/lpy
 	url = https://github.com/abo-abo/lpy

@@ -37,7 +37,65 @@
   (setq package-user-dir versioned-package-dir))
 
 (eval-when-compile
-  (require 'use-package))
+  (require 'use-package)
+
+  (defun use-package-normalize/:thook (name keyword args)
+    (use-package-as-one (symbol-name keyword) args
+      #'(lambda (label arg)
+          (unless (or (use-package-non-nil-symbolp arg) (consp arg))
+            (use-package-error
+             (concat label " a <symbol/function> "
+                     "or (<symbol/functions or list of symbols/functions> . <symbol or function>) "
+                     "or list of these")))
+          (use-package-normalize-pairs
+           #'(lambda (k)
+               (or (use-package-non-nil-symbolp k)
+                   (and k (let ((every t))
+                            (while (and every k)
+                              (if (and (consp k)
+                                       (use-package-non-nil-symbolp (car k)))
+                                  (setq k (cdr k))
+                                (setq every nil)))
+                            every))))
+           #'use-package-recognize-function
+           name label arg))))
+
+  (defalias 'use-package-autoloads/:thook 'use-package-autoloads-mode)
+
+  (defvar cm/transient-hook-count 0)
+
+  (defun use-package-handler/:thook (name _keyword args rest state)
+    (use-package-concat
+     (use-package-process-keywords name rest state)
+     (cl-mapcan (lambda (def)
+                  (let ((syms (car def))
+                        (fun (cdr def)))
+                    (when fun
+                      (mapcar
+                       (lambda (sym)
+                         (let* ((fn (intern
+                                     (format "cm/thook-fn-name-%d" cm/transient-hook-count)))
+                                (add-clause (cond
+                                             ((functionp sym)
+                                              `(advice-add #',sym :before #',fn))
+                                             ((symbolp sym)
+                                              `(add-hook ',sym #',fn))))
+                                (self-remove-clause (list (cond
+                                                           ((functionp sym)
+                                                            `(advice-remove #',sym #',fn))
+                                                           ((symbolp sym)
+                                                            `(remove-hook ',sym #',fn)))
+                                                          `(unintern ',fn nil))))
+                           (cl-incf cm/transient-hook-count 1)
+                           `(progn
+                              (fset ',fn (lambda (&rest _)
+                                           (apply #',fun _)
+                                           ,@self-remove-clause))
+                              ,add-clause)))
+                       (if (use-package-non-nil-symbolp syms)
+                           (list syms)
+                         syms)))))
+                (use-package-normalize-commands args)))))
 
 ;; Extensions
 (use-package package-utils
@@ -50,3 +108,4 @@
   (defalias 'cm/backup-extensions 'elpamr-create-mirror-for-installed))
 
 (provide 'init-package)
+;;; init-package.el ends here

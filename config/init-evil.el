@@ -65,7 +65,9 @@
     "f" 'evil-snipe-f
     "F" 'evil-snipe-F
     "t" 'evil-snipe-t
-    "T" 'evil-snipe-T))
+    "T" 'evil-snipe-T)
+  :config
+  (evil-snipe-local-mode +1))
 
 ;; (use-package evil-visualstar
 ;;   :hook (evil-after-load . global-evil-visualstar-mode))
