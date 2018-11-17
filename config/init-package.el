@@ -41,24 +41,26 @@
 
   (defun use-package-normalize/:thook (name keyword args)
     (use-package-as-one (symbol-name keyword) args
-      #'(lambda (label arg)
-          (unless (or (use-package-non-nil-symbolp arg) (consp arg))
-            (use-package-error
-             (concat label " a <symbol/function> "
-                     "or (<symbol/functions or list of symbols/functions> . <symbol or function>) "
-                     "or list of these")))
-          (use-package-normalize-pairs
-           #'(lambda (k)
-               (or (use-package-non-nil-symbolp k)
-                   (and k (let ((every t))
-                            (while (and every k)
-                              (if (and (consp k)
-                                       (use-package-non-nil-symbolp (car k)))
-                                  (setq k (cdr k))
-                                (setq every nil)))
-                            every))))
-           #'use-package-recognize-function
-           name label arg))))
+      (lambda (label arg)
+        (unless (or (use-package-non-nil-symbolp arg) (consp arg))
+          (use-package-error
+           (concat label " a <symbol/function> "
+                   "or (<symbol/functions or list of symbols/functions> . <symbol or function>) "
+                   "or list of these")))
+        (use-package-normalize-pairs
+         (lambda (k)
+           (or (use-package-non-nil-symbolp k)
+               (and k (let ((every t))
+                        (while (and every k)
+                          (if (and (consp k)
+                                   (use-package-non-nil-symbolp (car k)))
+                              (setq k (cdr k))
+                            (setq every nil)))
+                        every))))
+         (lambda (v)
+           (or (listp v)
+               (use-package-recognize-function v)))
+         name label arg))))
 
   (defalias 'use-package-autoloads/:thook 'use-package-autoloads-mode)
 
@@ -69,8 +71,8 @@
      (use-package-process-keywords name rest state)
      (cl-mapcan (lambda (def)
                   (let ((syms (car def))
-                        (fun (cdr def)))
-                    (when fun
+                        (forms (cdr def)))
+                    (when forms
                       (mapcar
                        (lambda (sym)
                          (let* ((fn (intern
@@ -89,13 +91,18 @@
                            (cl-incf cm/transient-hook-count 1)
                            `(progn
                               (fset ',fn (lambda (&rest _)
-                                           (apply #',fun _)
+                                           ,(if (functionp forms)
+                                                `(funcall #',forms)
+                                              (cons #'progn
+                                                    forms))
                                            ,@self-remove-clause))
                               ,add-clause)))
                        (if (use-package-non-nil-symbolp syms)
                            (list syms)
                          syms)))))
-                (use-package-normalize-commands args)))))
+                (use-package-normalize-commands args))))
+
+  (add-to-list 'use-package-keywords :thook))
 
 ;; Extensions
 (use-package package-utils
