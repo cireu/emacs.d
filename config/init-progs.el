@@ -1,8 +1,8 @@
 ;; YASnippet
 (use-package yasnippet
-  :hook (after-init . yas-global-mode)
-  :bind (:map global-map
-              ("M-j" . yas-expand))
+  :hook ((org-mode
+          prog-mode) . yas-minor-mode-on)
+  :general (:keymaps 'yas-minor-mode-map "M-j" 'yas-expand)
   :config (use-package yasnippet-snippets))
 
 ;; Paredit
@@ -52,7 +52,7 @@
   :config
   (setq company-tooltip-align-annotations t ; aligns annotation to the right
         company-tooltip-limit 12            ; bigger popup window
-        company-idle-delay .2               ; decrease delay before autocompletion popup shows
+        company-idle-delay .4               ; decrease delay before autocompletion popup shows
         company-echo-delay 0                ; remove annoying blinking
         company-minimum-prefix-length 2
         company-require-match nil
@@ -68,7 +68,7 @@
          typescript-mode
          js2-mode) . flycheck-mode)
 
-;; Show 
+;; Show
 
 (use-package avy-flycheck
   :hook (flycheck-mode . avy-flycheck-setup))

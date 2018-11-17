@@ -6,14 +6,14 @@
 
 ;; Avoid Emacs do GC during the initializing
 (let ((init-time-gc-cons-thresold (* 100 1024 1024))
-      (init-time-gc-cons-precentage 0.6)
+      (init-time-gc-cons-percentage 0.6)
       (run-time-gc-cons-thresold (* 20 1024 1024))
-      (run-time-gc-cons-precentage 0.1))
+      (run-time-gc-cons-percentage 0.1))
   (setq gc-cons-thresold init-time-gc-cons-thresold
         gc-cons-percentage init-time-gc-cons-percentage)
   (add-hook 'emacs-startup-hook (lambda ()
                                   (setq gc-cons-threshold run-time-gc-cons-thresold
-                                        gc-cons-percentage run-time-gc-cons-precentage)
+                                        gc-cons-percentage run-time-gc-cons-percentage)
                                   (add-hook 'focus-out-hook 'garbage-collect))))
 
 (defmacro load-config! (config)

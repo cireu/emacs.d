@@ -27,13 +27,7 @@
               tab-width        2
               indent-tabs-mode nil)
 
-
-;;; Better jumping and moving
-;; Move to the beginning/end of the line or code
-(use-package mwim
-  :bind (("C-a" . mwim-beginning-of-code-or-line)
-         ("C-e" . mwim-end-of-code-or-line)))
-
+;;; jump and navigation
 ;; Jump to wherever we can
 (use-package avy
   :bind (("C-'" . avy-goto-char-inline)
@@ -49,16 +43,18 @@
 ;;; Region Operation
 ;; Expand-region
 (use-package expand-region
-  :bind (("C-c v" . er/expand-region)))
+  :general
+  (vmap
+    "v" 'er/expand-region
+    "V" 'er/contract-region))
 
 ;;; Miscs
 ;; Use modern regexp for replacement
 (use-package visual-regexp-streoid
-  :bind (("C-c q" . vr/query-replace)))
+  :general
+  (l-s
+    "r" 'vr/query-replace))
 
-;; Undo-tree
-(use-package undo-tree
-  :hook (after-init . global-undo-tree-mode))
 
 (use-package hide-show
   :ensure nil

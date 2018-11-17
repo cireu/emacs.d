@@ -66,14 +66,50 @@
     "F" 'evil-snipe-F
     "t" 'evil-snipe-t
     "T" 'evil-snipe-T)
-  :config
-  (evil-snipe-local-mode +1))
+  :config (evil-snipe-override-mode))
 
-;; (use-package evil-visualstar
-;;   :hook (evil-after-load . global-evil-visualstar-mode))
+(use-package evil-lion
+  :general
+  (nvmap
+    "gl" 'evil-lion-left
+    "gL" 'evil-lion-right)
+  :config (evil-lion-mode))
 
-;; (use-package evil-nerd-commenter
-;;   :hook
-;;   :general
-;;   (l-spc
-;;     "cl" 'evilnc-comment-or-uncomment-lines))
+(use-package evil-exchange
+  :general
+  (nvmap
+    "gx" 'evil-exchange
+    "gX" 'evil-exchange))
+
+(use-package evil-matchit
+  :general
+  (nvmap
+    [remap evil-jump-item] 'evilmi-jump-items)
+  (itomap "%" 'evilmi-inner-text-object)
+  (otomap "%" 'evilmi-outer-text-object)
+  :config (global-evil-matchit-mode))
+
+(use-package evil-nerd-commenter
+  :general
+  (nvmap "gc" 'evilnc-comment-operator)
+  (l-spc
+    "cl" 'evilnc-comment-or-uncomment-lines))
+
+(use-package evil-surround
+  :thook ((evil-visual-state-entry-hook
+           evil-operator-state-entry-hook) . global-evil-surround-mode))
+
+;; (use-package evil-embrace
+;;   :hook (org-mode . embrace-org-mode)
+;;   :config
+;;   (setq evil-embrace-show-help-p nil)
+;;   (evil-embrace-enable-evil-surround-integration))
+
+;; Undo-tree is a part of `evil'
+(use-package undo-tree
+  :general
+  (l-spc
+    "au" 'undo-tree-visualize)
+  :config (global-undo-tree-mode))
+
+(provide 'init-evil)

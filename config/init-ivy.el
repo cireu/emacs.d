@@ -1,31 +1,57 @@
 ;; Ivy, swiper, counsel
+;; `ivy' is the dependency of the `swiper', and `swiper'is the dependency of the `counsel'
 (use-package counsel
-  :bind (("C-s" . swiper)
-         ("C-S-s" . swiper-all)
+  :general
+  ("C-s" 'swiper
+   "C-c C-r" 'ivy-resume)
+  (:keymaps 'counsel-mode-map
+            [remap swiper] 'counsel-grep-or-swiper
+            "C-x C-r" 'counsel-recentf
+            "C-x j" 'counsel-mark-ring
 
-         ("C-c C-r" . ivy-resume)
-         :map counsel-mode-map
-         ([remap swiper] . counsel-grep-or-swiper)
+            "C-c L" 'counsel-load-library
+            "C-c P" 'counsel-package
+            "C-c f" 'counsel-find-library
+            "C-c g" 'counsel-grep
+            "C-c h" 'counsel-command-history
+            "C-c i" 'counsel-git
+            "C-c j" 'counsel-git-grep
+            "C-c l" 'counsel-locate
+            "C-c r" 'counsel-rg
+            "C-c z" 'counsel-fzf
 
-         :map counsel-find-file-map
-         ("C-h" . counsel-up-directory)
-
-         :map swiper-map
-         ("M-q" . swiper-query-replace))
+            "C-c c L" 'counsel-load-library
+            "C-c c P" 'counsel-package
+            "C-c c a" 'counsel-apropos
+            "C-c c e" 'counsel-colors-emacs
+            "C-c c f" 'counsel-find-library
+            "C-c c g" 'counsel-grep
+            "C-c c h" 'counsel-command-history
+            "C-c c i" 'counsel-git
+            "C-c c j" 'counsel-git-grep
+            "C-c c l" 'counsel-locate
+            "C-c c m" 'counsel-minibuffer-history
+            "C-c c o" 'counsel-outline
+            "C-c c p" 'counsel-pt
+            "C-c c r" 'counsel-rg
+            "C-c c s" 'counsel-ag
+            "C-c c t" 'counsel-load-theme
+            "C-c c u" 'counsel-unicode-char
+            "C-c c w" 'counsel-colors-web
+            "C-c c z" 'counsel-fzf)
+  (:keymaps 'swiper-map
+            "M-q" 'swiper-query-replace)
   :hook ((after-init . ivy-mode)
          (ivy-mode . counsel-mode))
   :config
-    :config
-  (setq enable-recursive-minibuffers t) ; Allow commands in minibuffers
+  (setq enable-recursive-minibuffers t)
 
-  (setq ivy-use-selectable-prompt t)
-  (setq ivy-use-virtual-buffers t)    ; Enable bookmarks and recentf
-  (setq ivy-height 10)
-  (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-on-del-error-function nil)
-  (setq ivy-format-function 'ivy-format-function-arrow)
-  ;; (setq ivy-initial-inputs-alist nil)
-
+  (setq ivy-use-selectable-prompt t
+        ivy-use-virtual-buffers t
+        ivy-height 10
+        ivy-count-format "(%d/%d) "
+        ivy-on-del-error-function nil
+        ivy-format-function 'ivy-format-function-arrow)
   (setq ivy-re-builders-alist
         '((read-file-name-internal . ivy--regex-fuzzy)
           (t . ivy--regex-plus)))
@@ -49,9 +75,11 @@
     (setq counsel-rg-base-command
           "rg -i -M 120 --no-heading --line-number --color never %s .")))
 
-;; Enchanced M-x
-(use-package smex)
 
+;; enchanced M-x
+(use-package amx)
+
+(use-package flx)
 ;; Pop a childframe to show the completion
 ;; (use-package ivy-posframe
 ;;   :config
