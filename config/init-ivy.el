@@ -79,18 +79,7 @@
 ;; enchanced M-x
 (use-package amx)
 
+;; For better fuzzy search
 (use-package flx)
-;; Pop a childframe to show the completion
-;; (use-package ivy-posframe
-;;   :config
-;;   (setq ivy-posframe-parameters '((left-fringe . 5)
-;;                                   (right-fringe . 5)))
-
-;;   (dolist (func '(counsel-M-x
-;;                   counsel-find-file
-;;                   ivy-switch-buffer))
-;;     (push `(,func . ivy-posframe-display-at-point) ivy-display-functions-alist))
-
-;;   (ivy-posframe-enable))
 
 (provide 'init-ivy)

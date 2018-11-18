@@ -11,6 +11,12 @@
 
 (advice-add 'package--save-selected-packages :override #'my-save-selected-packages)
 
+;;; Install into separate package dirs for each Emacs version, to prevent bytecode incompatibility
+(let ((versioned-package-dir
+       (expand-file-name (format "elpa-%s.%s" emacs-major-version emacs-minor-version)
+                         user-emacs-directory)))
+  (setq package-user-dir versioned-package-dir))
+
 ;; Set up the ELPA source
 (setq package-archives
       '(
@@ -30,11 +36,6 @@
       use-package-always-ensure t
       use-package-expand-minimally t)
 
-;;; Install into separate package dirs for each Emacs version, to prevent bytecode incompatibility
-(let ((versioned-package-dir
-       (expand-file-name (format "elpa-%s.%s" emacs-major-version emacs-minor-version)
-                         user-emacs-directory)))
-  (setq package-user-dir versioned-package-dir))
 
 (eval-when-compile
   (require 'use-package)
