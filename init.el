@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t; -*-
+(setq debug-on-error t)
 
 (let ((minver "26.1"))
   (when (version< emacs-version minver)

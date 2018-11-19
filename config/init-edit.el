@@ -30,15 +30,18 @@
 ;;; jump and navigation
 ;; Jump to wherever we can
 (use-package avy
-  :bind (("C-'" . avy-goto-char-inline)
-         ("M-g g" . avy-goto-line)
-         ("M-g j" . avy-goto-char-timer))
-  :hook (after-init . avy-setup-default)
-  :config (setq avy-background t))
+  :general
+  (l-s
+    "s" 'avy-goto-char-2
+    "l" 'avy-goto-line)
+  :config
+  (setq avy-background t)
+  (avy-setup-default))
 
 ;; Jump between links
 (use-package ace-link
-  :bind (("M-g l" . ace-link-addr)))
+  :general
+  ("M-g l" 'ace-link-addr))
 
 ;;; Region Operation
 ;; Expand-region
@@ -58,19 +61,31 @@
 
 (use-package hide-show
   :ensure nil
-  :bind (:map hs-minor-mode-map
-              ("C-`" . hs-toggle-hiding)))
+  :general
+  (:keymaps 'hs-minor-mode-map
+            ("C-`" 'hs-toggle-hiding)))
 
 (use-package aggressive-indent
-  :hook ((after-init . global-aggressive-indent-mode)
+  :hook ((prog-mode . global-aggressive-indent-mode)
          ;; Disable in big file due to the performance issues
          ;; https://github.com/Malabarba/aggressive-indent-mode/issues/73
          (find-file . (lambda ()
                         (if (> (buffer-size (* 3000 80)))
-                            (aggressive-indent-mode ace-pinyin--original-avy-word-1)))))
+                            (aggressive-indent-mode -1)))))
   :config
   ;; Disable in some mode
   (dolist (mode '(html-mode web-mode css-mode))
     (push mode aggressive-indent-excluded-modes)))
+
+(use-package anzu
+  :general
+  ([remap query-replace] 'anzu-query-replace
+   [remap query-replace-regexp] 'anzu-query-replace-regexp
+   [remap isearch-query-replace] 'anzu-isearch-query-replace
+   [remap isearch-query-replace-regexp] 'anzu-isearch-query-replace-regexp)
+  (l-s
+    "rr" 'anzu-query-replace
+    "rp" 'anzu-query-replace-at-cursor-things
+    "re" 'anzu-query-replace-regexp))
 
 (provide 'init-edit)
