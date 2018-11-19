@@ -9,64 +9,74 @@
 (let ((init-time-gc-cons-threshold (* 100 1024 1024))
       (init-time-gc-cons-percentage 0.6)
       (run-time-gc-cons-threshold (* 20 1024 1024))
-      (run-time-gc-cons-percentage 0.1))
+      (run-time-gc-cons-percentage 0.1)
+      (default-file-name-handler-alist file-name-handler-alist))
   (setq gc-cons-threshold init-time-gc-cons-threshold
         gc-cons-percentage init-time-gc-cons-percentage)
   (add-hook 'emacs-startup-hook (lambda ()
+                                  (setq file-name-handler-alist default-file-name-handler-alist)
                                   (setq gc-cons-threshold run-time-gc-cons-threshold
                                         gc-cons-percentage run-time-gc-cons-percentage)
                                   (add-hook 'focus-out-hook 'garbage-collect))))
 
-(defmacro cm/load-config (config)
-  "Load the config files"
-  `(load ,(file-truename (format "~/.emacs.d/config/%s" config))))
 
-(let ((file-name-handler-alist nil))
+;; (defmacro cm/load-config (config)
+;;   "Load the config files"
+;;   `(load ,(file-truename (format "~/.emacs.d/config/%s" config))))
 
-  (setq custom-file (concat user-emacs-directory "custom.el"))
-  ;; Without this comment emacs25 add (package-initialize) here
-  ;; Package management
-  (cm/load-config init-package)
+;; Initialize packages
+(unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
+  (setq package-enable-at-startup nil)          ; To prevent initializing twice
+  (package-initialize))
 
-  ;; Key-bindings
-  (cm/load-config init-evil)
-  (cm/load-config init-hydra)
+;; Load path
+(cl-pushnew (expand-file-name "site-lisp" user-emacs-directory) load-path)
+(cl-pushnew (expand-file-name "lisp" user-emacs-directory) load-path)
 
-  ;; Basic
-  (cm/load-config init-ivy)
+(setq custom-file (concat user-emacs-directory "custom.el"))
+;; Without this comment emacs25 add (package-initialize) here
+;; Package management
+(require 'init-package)
 
-  ;; Better editing
-  (cm/load-config init-edit)
+;; Key-bindings
+(require 'init-evil)
+(require 'init-hydra)
 
-  ;; General programming functions
-  (cm/load-config init-progs)
+;; Basic
+(require 'init-ivy)
 
-  ;; Programming Language
-  (cm/load-config init-jts)
-  (cm/load-config init-common-lisp)
-  (cm/load-config init-emacs-lisp)
-  (cm/load-config init-python)
+;; Better editing
+(require 'init-edit)
 
-  ;; Markup-language
-  (cm/load-config init-plantuml)
-  (cm/load-config init-org)
-  (cm/load-config init-markdown)
+;; General programming functions
+(require 'init-progs)
 
-  ;; UI
-  (cm/load-config init-ui)
+;; Programming Language
+(require 'init-jts)
+(require 'init-common-lisp)
+(require 'init-emacs-lisp)
+(require 'init-python)
 
-  ;; Chinese language support
-  (cm/load-config init-chinese)
+;; Markup-language
+(require 'init-plantuml)
+(require 'init-org)
+(require 'init-markdown)
 
-  ;; File-managemnet
-  (cm/load-config init-dired)
-  (cm/load-config init-treemacs)
+;; UI
+(require 'init-ui)
 
-  ;; Applications
-  (cm/load-config init-wanderlust)
-  (cm/load-config init-edit-server)
-  (cm/load-config init-gnus)
-  (cm/load-config init-emms)
+;; Chinese language support
+(require 'init-chinese)
 
-  ;; Load custom file
-  (when (file-exists-p custom-file) (load custom-file)))
+;; File-managemnet
+(require 'init-dired)
+(require 'init-treemacs)
+
+;; Applications
+(require 'init-wanderlust)
+(require 'init-edit-server)
+(require 'init-gnus)
+(require 'init-emms)
+
+;; Load custom file
+(when (file-exists-p custom-file) (load custom-file))

@@ -1,2 +1,6 @@
 *.elc
-.#*
+.\#*
+elpa*/
+amx-items
+/.rgignore
+/custom.el

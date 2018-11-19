@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-;; FIXME: DO NOT copy package-selected-packages to init/custom file forcibly.
+;; HACK: DO NOT copy package-selected-packages to init/custom file forcibly.
 ;; https://github.com/jwiegley/use-package/issues/383#issuecomment-247801751
 (defun my-save-selected-packages (&optional value)
   "Set and (don't!) save `package-selected-packages' to VALUE."
@@ -22,11 +22,6 @@
       '(
         ("melpa" . "https://elpa.emacs-china.org/melpa/")
         ("org"   . "https://elpa.emacs-china.org/org/")))
-
-;; Fire up the `package.el'
-(setq package-enable-at-startup nil)
-(unless (bound-and-true-p package--initialized)
-  (package-initialize))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
