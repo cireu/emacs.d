@@ -1,9 +1,35 @@
-;; Ivy, swiper, counsel
-;; `ivy' is the dependency of the `swiper', and `swiper'is the dependency of the `counsel'
+;; Ivy
+(use-package ivy
+  :defer 1
+  :general ("C-c C-r" 'ivy-resume)
+  :config
+  (setq ivy-use-selectable-prompt t
+        ivy-use-virtual-buffers t
+        ivy-initial-inputs-alist nil
+        ivy-height 20
+        ivy-count-format "(%d/%d) "
+        ivy-on-del-error-function nil
+        ivy-format-function 'ivy-format-function-arrow)
+  (ivy-mode +1))
+
+(use-package ivy-rich
+  :hook (ivy-mode . ivy-rich-mode))
+
+
+(use-package ivy-hydra
+  :general)
+
+;; Swiper
+(use-package swiper
+  :general
+  ("C-s" 'swiper)
+  (:keymaps 'swiper-map
+            "M-q" 'swiper-query-replace))
+
 (use-package counsel
   :general
-  ("C-s" 'swiper
-   "C-c C-r" 'ivy-resume)
+  (:keymaps 'counsel-mode-map
+            [remap swiper] 'counsel-grep-or-swiper)
   (:keymaps 'counsel-mode-map
             [remap swiper] 'counsel-grep-or-swiper
             "C-x C-r" 'counsel-recentf
@@ -41,20 +67,12 @@
             "C-c c z" 'counsel-fzf)
   (:keymaps 'swiper-map
             "M-q" 'swiper-query-replace)
-  :hook ((after-init . ivy-mode)
-         (ivy-mode . counsel-mode))
+  :hook (ivy-mode . counsel-mode)
   :config
   (setq enable-recursive-minibuffers t)
 
-  (setq ivy-use-selectable-prompt t
-        ivy-use-virtual-buffers t
-        ivy-height 10
-        ivy-count-format "(%d/%d) "
-        ivy-on-del-error-function nil
-        ivy-format-function 'ivy-format-function-arrow)
-  (setq ivy-re-builders-alist
-        '((read-file-name-internal . ivy--regex-fuzzy)
-          (t . ivy--regex-plus)))
+
+
 
   (setq swiper-action-recenter t)
   (setq counsel-find-file-at-point t)
@@ -65,8 +83,8 @@
          (cond
           ((executable-find "rg")
            "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-          ((executable-find "ag")
-           "ag -i --noheading --nocolor --nofilename --numbers '%s' %s")
+          ((executable-find "pt")
+           "pt -zS --nocolor --nogroup -e %s")
           (t counsel-grep-base-command))))
     (setq counsel-grep-base-command command))
 
@@ -80,6 +98,14 @@
 (use-package amx)
 
 ;; For better fuzzy search
-(use-package flx)
+(use-package flx
+  :init
+  (setq ivy-re-builders-alist
+        '((counsel-grep . ivy--regex-plus)
+          (counsel-rg . ivy--regex-plus)
+          (counsel-pt . ivy--regex-plus)
+          (swiper . ivy--regex-plus)
+          (t . ivy--regex-fuzzy))))
 
 (provide 'init-ivy)
+;; init-ivy.el ends here
