@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+;;; -*- lexical-binding: t; -*-
 (setq debug-on-error t)
 
 (let ((minver "26.1"))
@@ -13,6 +13,7 @@
       (default-file-name-handler-alist file-name-handler-alist))
   (setq gc-cons-threshold init-time-gc-cons-threshold
         gc-cons-percentage init-time-gc-cons-percentage)
+  (setq file-name-handler-alist nil)
   (add-hook 'emacs-startup-hook (lambda ()
                                   (setq file-name-handler-alist default-file-name-handler-alist)
                                   (setq gc-cons-threshold run-time-gc-cons-threshold
@@ -24,59 +25,61 @@
 ;;   "Load the config files"
 ;;   `(load ,(file-truename (format "~/.emacs.d/config/%s" config))))
 
-;; Initialize packages
-(unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
-  (setq package-enable-at-startup nil)          ; To prevent initializing twice
-  (package-initialize))
-
-;; Load path
-(cl-pushnew (expand-file-name "site-lisp" user-emacs-directory) load-path)
-(cl-pushnew (expand-file-name "lisp" user-emacs-directory) load-path)
+(defmacro cm/load-config (config)
+  "Load the config file"
+  `(load ,(expand-file-name (format "config/%s" config) user-emacs-directory)))
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 ;; Without this comment emacs25 add (package-initialize) here
 ;; Package management
-(require 'init-package)
+(cm/load-config 'init-package)
 
 ;; Key-bindings
-(require 'init-evil)
-(require 'init-hydra)
+(cm/load-config 'init-evil)
+(cm/load-config 'init-hydra)
 
 ;; Basic
-(require 'init-ivy)
+(cm/load-config 'init-ivy)
 
 ;; Better editing
-(require 'init-edit)
+(cm/load-config 'init-edit)
 
 ;; General programming functions
-(require 'init-progs)
-
-;; Programming Language
-(require 'init-jts)
-(require 'init-common-lisp)
-(require 'init-emacs-lisp)
-(require 'init-python)
+(cm/load-config 'init-progs)
 
 ;; Markup-language
-(require 'init-plantuml)
-(require 'init-org)
-(require 'init-markdown)
+(cm/load-config 'init-plantuml)
+(cm/load-config 'init-org)
+(cm/load-config 'init-markdown)
+
+;; Programming Language
+(cm/load-config 'init-jts)
+(cm/load-config 'init-common-lisp)
+(cm/load-config 'init-emacs-lisp)
+(cm/load-config 'init-python)
 
 ;; UI
-(require 'init-ui)
+(cm/load-config 'init-ui)
 
 ;; Chinese language support
-(require 'init-chinese)
+(cm/load-config 'init-chinese)
 
 ;; File-managemnet
-(require 'init-dired)
-(require 'init-treemacs)
+(cm/load-config 'init-dired)
+(cm/load-config 'init-treemacs)
 
 ;; Applications
-(require 'init-wanderlust)
-(require 'init-edit-server)
-(require 'init-gnus)
-(require 'init-emms)
+(cm/load-config 'init-eshell)
+(cm/load-config 'init-wanderlust)
+(cm/load-config 'init-edit-server)
+(cm/load-config 'init-gnus)
+(cm/load-config 'init-emms)
+
+;; Load path
+(push (expand-file-name "config" user-emacs-directory) load-path)
 
 ;; Load custom file
 (when (file-exists-p custom-file) (load custom-file))
+
+(provide 'init)
+;;; init.el ends here

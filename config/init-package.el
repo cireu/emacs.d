@@ -23,6 +23,11 @@
         ("melpa" . "https://elpa.emacs-china.org/melpa/")
         ("org"   . "https://elpa.emacs-china.org/org/")))
 
+;; Initialize packages
+(unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
+  (setq package-enable-at-startup nil)          ; To prevent initializing twice
+  (package-initialize))
+
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -31,7 +36,7 @@
       use-package-always-ensure t
       use-package-expand-minimally t)
 
-
+;; Fire up `use-package'
 (eval-when-compile
   (require 'use-package)
 

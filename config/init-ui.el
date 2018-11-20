@@ -39,14 +39,13 @@
   :commands awesome-tray-mode
   :init
   (setq awesome-tray-mode-line-active-color "#3f444a"
-        awesome-tray-git-update-duration 15)
+        awesome-tray-git-update-duration 30)
   :hook (after-init . awesome-tray-mode))
 
 ;; Misc
-(fset 'yes-or-no-p 'y-or-n-p)
+(fset #'yes-or-no-p #'y-or-n-p)
 
 (setq-default fill-column 100)
-(setq visible-bell t)
 
 (setq line-move-visual nil)
 (setq track-eol t) ; Keep the cursor at the end of the line. Requires the `line-move-visual' is nil
@@ -54,5 +53,8 @@
 
 ;; Stop the blinking cursor
 (blink-cursor-mode -1)
+
+("#000000" "#000000" "#000000" "#000000" "#010101" "#010101" "#020202" "#030303" "#050505" "#090909" "#0E0E0E" "#171717" "#252525" "#3C3C3C" "#616161" "#616161" "#9E9E9E" "#9E9E9E" "#C3C3C3" "#DADADA" "#E8E8E8" "#F1F1F1" "#F6F6F6" "#FAFAFA" "#FCFCFC" "#FDFDFD" "#FEFEFE" "#FEFEFE" "#FFFFFF" "#FFFFFF" "#FFFFFF" "#FFFFFF")
+
 
 (provide 'init-ui)
