@@ -9,5 +9,5 @@
 /lib/elpa*
 
 ## Private files
-/opt
-/var
+/opt/*
+/var/*
