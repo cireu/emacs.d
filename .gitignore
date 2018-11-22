@@ -5,13 +5,9 @@
 \#*
 *~
 
-## Elpa
-/elpa*
-/.rgignore
+## ELPA
+/lib/elpa*
 
-## Custom files and cache files
-/custom.el
-/.cache
-
-## Binary utils
-/bin
+## Private files
+/opt
+/var

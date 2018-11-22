@@ -1,12 +1,12 @@
-[submodule "site-lisp/lazycat-collection/awesome-tray"]
-	path = site-lisp/lazycat-collection/awesome-tray
+[submodule "lib/site-lisp/lazycat-collection/awesome-tray"]
+	path = lib/site-lisp/lazycat-collection/awesome-tray
 	url = https://github.com/manateelazycat/awesome-tray.git
-[submodule "site-lisp/lazycat-collection/vi-navigate"]
-	path = site-lisp/lazycat-collection/vi-navigate
+[submodule "lib/site-lisp/lazycat-collection/vi-navigate"]
+	path = lib/site-lisp/lazycat-collection/vi-navigate
 	url = https://github.com/manateelazycat/vi-navigate
-[submodule "site-lisp/lazycat-collection/aweshell"]
-	path = site-lisp/lazycat-collection/aweshell
+[submodule "lib/site-lisp/lazycat-collection/aweshell"]
+	path = lib/site-lisp/lazycat-collection/aweshell
 	url = https://github.com/manateelazycat/aweshell
-[submodule "site-lisp/lpy"]
-	path = site-lisp/lpy
+[submodule "lib/site-lisp/lpy"]
+	path = lib/site-lisp/lpy
 	url = https://github.com/abo-abo/lpy
