@@ -11,4 +11,4 @@
 
 ## Private files
 /var
-/lib/custom.el
+/etc/custom.el
