@@ -28,24 +28,27 @@
 ;; Set up the themes
 (use-package doom-themes
   :init
-  (load-theme 'doom-one)
-  :config
-  (doom-themes-org-config)
-  (doom-themes-treemacs-config))
+  (load-theme 'doom-city-lights)
+  :thook (org-mode . doom-themes-org-config))
 
 ;; Show necessary meta-data in minibuffer instead of using mode-line
 (use-package awesome-tray
-  :load-path "site-lisp/lazycat-collection/awesome-tray"
+  :load-path "lib/site-lisp/awesome-tray"
   :commands awesome-tray-mode
   :init
   (setq awesome-tray-mode-line-active-color "#3f444a"
-        awesome-tray-git-update-duration 30)
+        awesome-tray-git-update-duration 30
+        awesome-tray-active-modules '("parent-dir" "git" "mode-name" "date"))
   :hook (after-init . awesome-tray-mode))
+
+;; All-the-icons
+(use-package all-the-icons
+  :commands (all-the-icons-material))
 
 ;; Misc
 (fset #'yes-or-no-p #'y-or-n-p)
 
-(setq-default fill-column 100)
+(setq-default fill-column 80)
 
 (setq line-move-visual nil)
 (setq track-eol t) ; Keep the cursor at the end of the line. Requires the `line-move-visual' is nil
@@ -54,7 +57,5 @@
 ;; Stop the blinking cursor
 (blink-cursor-mode -1)
 
-("#000000" "#000000" "#000000" "#000000" "#010101" "#010101" "#020202" "#030303" "#050505" "#090909" "#0E0E0E" "#171717" "#252525" "#3C3C3C" "#616161" "#616161" "#9E9E9E" "#9E9E9E" "#C3C3C3" "#DADADA" "#E8E8E8" "#F1F1F1" "#F6F6F6" "#FAFAFA" "#FCFCFC" "#FDFDFD" "#FEFEFE" "#FEFEFE" "#FFFFFF" "#FFFFFF" "#FFFFFF" "#FFFFFF")
-
-
 (provide 'init-ui)
+;;; init-ui.el ends here

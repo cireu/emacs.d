@@ -10,19 +10,8 @@
                        ivy-count-format
                        ivy-on-del-error-function
                        ivy-format-function)
-  :preface
-  (defun cm/ivy-format-function-arrow-auto-fill (cands)
-    "Transform CANDS into a string for minibuffer, but force the minibuffer to fit `ivy-height'"
-    (ivy--format-function-generic
-     (lambda (str)
-       (concat "> " (ivy--add-face str 'ivy-current-match)))
-     (lambda (str)
-       (concat "  " str (when (eq str (car (last cands)))
-                          (apply #'concat (cl-loop repeat (- ivy-height (length cands))
-                                                   collect "\n")))))
-     cands
-     "\n"))
   :defer 1
+  :thook (pre-command-hook . ((require 'ivy)))
   :general
   ("C-c C-r" 'ivy-resume)
   (l-spc
@@ -30,31 +19,44 @@
   (:keymaps 'ivy-minibuffer-map
             [escape] 'minibuffer-keyboard-quit)
   :config
+  (setq enable-recursive-minibuffers t)
   (setq ivy-use-selectable-prompt t
         ivy-use-virtual-buffers t
+
         ivy-initial-inputs-alist nil
         ivy-on-del-error-function nil
+
         ivy-height 20
+	ivy-fixed-height-minibuffer t
         ivy-count-format "(%d/%d) "
+        ivy-format-function #'ivy-format-function-arrow
+
         ivy-on-del-error-function nil
-        ivy-dynamic-exhibit-delay-ms 200
-        ivy-format-function #'cm/ivy-format-function-arrow-auto-fill)
+        ivy-dynamic-exhibit-delay-ms 200)
   (ivy-mode +1))
 
 (use-package ivy-rich
-  :hook (ivy-mode . ivy-rich-mode))
+  :hook
+  (ivy-mode . ivy-rich-mode)
+  (ivy-rich-mode . (lambda ()
+		     (setq ivy-virtual-abbreviate
+			   (or (and ivy-rich-mode 'abbreviate) 'name)))))
 
 (use-package ivy-hydra
+  :init
   :general
   (:keymaps 'ivy-minibuffer-map
-            "M-o" 'ivy-dispatching-done-hydra))
+            "M-o" 'ivy-dispatching-done-hydra
+	    "M-SPC" 'hydra-ivy/body)
+  (:keymaps 'hydra-ivy/keymap
+	    "M-SPC" 'hydra-ivy/nil))
 
 ;; Swiper
 (use-package swiper
   :preface
   (defun cm/swiper-region-or-symbol ()
     "Run `swiper' with the selected region or the symbol
-around point as the initial input."
+round point as the initial input."
     (interactive)
     (let ((input (if (region-active-p)
                      (buffer-substring-no-properties
@@ -71,22 +73,21 @@ around point as the initial input."
 
 (use-package counsel
   :general
-  (:keymaps 'counsel-mode-map
-            [remap swiper] 'counsel-grep-or-swiper)
-  (l-spc                   'counsel-mode-map
-    "SPC"                  'counsel-M-x
+  ([remap swiper] 'counsel-grep-or-swiper)
+  (l-spc                   
+    "SPC"         'counsel-M-x
 
-    "fr"                   'counsel-recentf
-    "ff"                   'counsel-find-file
-    "fL"                   'counsel-find-library
+    "fr"          'counsel-recentf
+    "ff"          'counsel-find-file
+    "fL"          'counsel-find-library
 
-    "aL"                   'counsel-load-library
-    "aP"                   'cousel-package
+    "aL"          'counsel-load-library
+    "aP"          'cousel-package
 
-    "T"                    'counsel-load-theme
+    "T"           'counsel-load-theme
 
-    "iu"                   'counsel-unicode-char)
-  (l-s 'counsel-mode-map
+    "iu"          'counsel-unicode-char)
+  (l-s 
     "r" 'counsel-rg
     "g" 'counsel-grep
     "p" 'counsel-pt)
@@ -119,37 +120,38 @@ around point as the initial input."
 
   ;; Use faster search tools: ripgrep or the silver search
   (let ((command
-         (cond
-          ((executable-find "rg")
-           "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-          ((executable-find "pt")
-           "pt -zS --nocolor --nogroup -e %s")
-          (t counsel-grep-base-command))))
+	 (cond
+	  ((executable-find "rg")
+	   "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+	  ((executable-find "pt")
+	   "pt -zS --nocolor --nogroup -e %s")
+	  (t counsel-grep-base-command))))
     (setq counsel-grep-base-command command))
 
   (when (executable-find "rg")
     (setq counsel-git-cmd "rg --files")
     (setq counsel-rg-base-command
-          "rg -i -M 120 --no-heading --line-number --color never %s .")))
+	  "rg -i -M 120 --no-heading --line-number --color never %s .")))
 
 ;; Enchanced M-x
-(use-package amx)
+(use-package amx
+  :init
+  (setq amx-save-file (expand-file-name "amx-items" cm/cache-files-directory)))
 
 ;; For better fuzzy searching
 (use-package flx
   :init
   (setq ivy-re-builders-alist
-        '((counsel-grep . ivy--regex-plus)
-          (counsel-rg   . ivy--regex-plus)
-          (counsel-pt   . ivy--regex-plus)
-          (swiper       . ivy--regex-plus)
-          (t            . ivy--regex-fuzzy))))
+	'((counsel-grep . ivy--regex-plus)
+	  (counsel-rg   . ivy--regex-plus)
+	  (counsel-pt   . ivy--regex-plus)
+	  (swiper       . ivy--regex-plus)
+	  (t            . ivy--regex-fuzzy))))
 
 ;; World Time
 (use-package counsel-world-clock
   :general
   (l-spc
-    :keymaps 'counsel-mode-map
     "ak" 'counsel-world-clock))
 
 (provide 'init-ivy)

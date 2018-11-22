@@ -35,7 +35,8 @@
     "s" 'avy-goto-char-2
     "l" 'avy-goto-line)
   :config
-  (setq avy-background t)
+  (setq avy-background t
+	avy-all-windows nil)
   (avy-setup-default))
 
 ;; Jump between links
@@ -51,32 +52,25 @@
     "v" 'er/expand-region
     "V" 'er/contract-region))
 
-;;; Miscs
-;; Use modern regexp for replacement
-(use-package visual-regexp-streoid
-  :general
-  (l-s
-    "r" 'vr/query-replace))
-
-
-(use-package hide-show
-  :ensure nil
-  :general
-  (:keymaps 'hs-minor-mode-map
-            ("C-`" 'hs-toggle-hiding)))
+;; (use-package hide-show
+;;   :ensure nil
+;;   :general
+;;   (:keymaps 'hs-minor-mode-map
+;;             "C-`" 'hs-toggle-hiding))
 
 (use-package aggressive-indent
   :hook ((prog-mode . global-aggressive-indent-mode)
          ;; Disable in big file due to the performance issues
          ;; https://github.com/Malabarba/aggressive-indent-mode/issues/73
          (find-file . (lambda ()
-                        (if (> (buffer-size (* 3000 80)))
-                            (aggressive-indent-mode -1)))))
+                        (when (> (buffer-size) (* 3000 80)))
+                          (aggressive-indent-mode -1))))
   :config
   ;; Disable in some mode
   (dolist (mode '(html-mode web-mode css-mode))
     (push mode aggressive-indent-excluded-modes)))
 
+;; Visualize searching
 (use-package anzu
   :general
   ([remap query-replace] 'anzu-query-replace
@@ -84,8 +78,44 @@
    [remap isearch-query-replace] 'anzu-isearch-query-replace
    [remap isearch-query-replace-regexp] 'anzu-isearch-query-replace-regexp)
   (l-s
-    "rr" 'anzu-query-replace
-    "rp" 'anzu-query-replace-at-cursor-things
-    "re" 'anzu-query-replace-regexp))
+    "3" 'anzu-query-replace
+    "#" 'anzu-query-replace-regexp
+    "4" 'anzu-query-replace-at-cursor-things))
+
+;; Line number
+(use-package display-line-numbers
+  :when (fboundp 'display-line-numbers-mode)
+  :ensure nil
+  :hook (prog-mode . display-line-numbers-mode))
+
+;; Paredit
+(use-package paredit
+  :preface
+  ;; Paredit will add space when you type delimiters, which is annoying in non-lisp
+  ;; language, this is a work-around to fix it
+  (defun paredit/space-for-delimiter-p (endp delim)
+    (or (member 'font-lock-keyword-face (text-properties-at (1- (point))))
+	(not (derived-mode-p ;; 'js2-mode
+	      ;; 'typescript-mode
+	      'python-mode))))
+  :hook ((;; js2-mode
+	  ;; typescript-mode
+	  python-mode
+	  lisp-mode
+	  lisp-interaction-mode
+	  emacs-lisp-mode
+	  ielm-mode
+	  slime-repl-mode-hook) . paredit-mode)
+  :config (add-to-list 'paredit-space-for-delimiter-predicates #'paredit/space-for-delimiter-p))
+
+;;; Darkroom mode
+(use-package darkroom
+  :init
+  ;; Don't scale the text, so ugly man!
+  (setq darkroom-text-scale-increase 1)
+  :general
+  (l-spc
+    "td" 'darkroom-tentative-mode))
 
 (provide 'init-edit)
+;;; init-edit.el ends here

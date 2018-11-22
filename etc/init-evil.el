@@ -3,7 +3,7 @@
 ;; Better way to manage key bindings
 (use-package general
   :init
-  (general-evil-setup 'with-shortname-maps)
+  (general-evil-setup :with-shortname-maps)
 
   ;; The global leader
   (general-create-definer l-spc :states '(n v)
@@ -21,10 +21,12 @@
 (use-package evil
   :hook (after-init . evil-mode)
   :init
-  (setq evil-want-C-u-scroll t
-        evil-want-C-d-scroll t
-        evil-want-C-w-delete t
-        evil-want-Y-yank-to-eol t)
+  ;; Avoid byte-compile warnings
+  (defvar evil-want-C-u-scroll t)
+  (defvar evil-want-C-d-scroll t)
+  (defvar evil-want-C-w-delete t)
+  (defvar evil-want-Y-yank-to-eol t)
+
   (setq evil-symbol-word-search t
         evil-ex-substitute-global t)
   :general
@@ -112,4 +114,16 @@
     "au" 'undo-tree-visualize)
   :config (global-undo-tree-mode))
 
+;; Record your key frequency
+(use-package keyfreq
+  :init
+  (setq keyfreq-file (expand-file-name ".emacs.keyfreq"
+                                       cm/cache-files-directory)
+        keyfreq-file-lock (expand-file-name ".emacs.keyfreq.lock"
+                                            cm/cache-files-directory))
+  :thook (pre-command-hook . ((require 'keyfreq)
+                              (keyfreq-mode +1)
+                              (keyfreq-autosave-mode +1))))
+
 (provide 'init-evil)
+;;; init-evil.el ends here

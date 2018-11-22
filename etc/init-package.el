@@ -3,14 +3,20 @@
 ;;; Install into separate package dirs for each Emacs version, to prevent bytecode incompatibility
 (let ((versioned-package-dir
        (expand-file-name (format "elpa-%s.%s" emacs-major-version emacs-minor-version)
-                         cm/library-file-directory)))
+                         cm/library-files-directory)))
   (setq package-user-dir versioned-package-dir))
 
 ;; Set up the ELPA source
 (setq package-archives
       '(
         ("melpa" . "https://elpa.emacs-china.org/melpa/")
-        ("org"   . "https://elpa.emacs-china.org/org/")))
+        ("org"   . "https://elpa.emacs-china.org/org/")
+	("gnu" . "https://elpa.emacs-china.org/gnu/")))
+
+
+(unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
+  (setq package-enable-at-startup nil)          ; To prevent initializing twice
+  (package-initialize))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -92,7 +98,7 @@
 ;; Extensions
 (use-package package-utils
   :init
-  (defalias 'cm/upgrade-all 'package-utils-upgrad-all)
+  (defalias 'cm/upgrade-all 'package-utils-upgrade-all)
   (defalias 'cm/upgrade-all-and-restart 'package-utils-upgrade-all-and-restart))
 
 (use-package elpa-mirror
