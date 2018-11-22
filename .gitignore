@@ -2,6 +2,7 @@
 *.elc
 
 ## Auto-saved files
+.\#*
 \#*
 *~
 
@@ -9,5 +10,5 @@
 /lib/elpa*
 
 ## Private files
-/opt/*
-/var/*
+/var
+/lib/custom.el
