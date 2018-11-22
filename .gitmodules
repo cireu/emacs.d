@@ -1,9 +1,6 @@
 [submodule "lib/site-lisp/lazycat-collection/awesome-tray"]
 	path = lib/site-lisp/lazycat-collection/awesome-tray
 	url = https://github.com/manateelazycat/awesome-tray.git
-[submodule "lib/site-lisp/lazycat-collection/vi-navigate"]
-	path = lib/site-lisp/lazycat-collection/vi-navigate
-	url = https://github.com/manateelazycat/vi-navigate
 [submodule "lib/site-lisp/lazycat-collection/aweshell"]
 	path = lib/site-lisp/lazycat-collection/aweshell
 	url = https://github.com/manateelazycat/aweshell
