@@ -29,7 +29,9 @@
 (use-package doom-themes
   :init
   (load-theme 'doom-city-lights)
-  :thook (org-mode . doom-themes-org-config))
+  (cm/add-temp-hook #'org-mode
+    (doom-themes-org-config)))
+
 
 ;; Show necessary meta-data in minibuffer instead of using mode-line
 (use-package awesome-tray

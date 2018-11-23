@@ -11,14 +11,7 @@
                        ivy-on-del-error-function
                        ivy-format-function)
   :defer 1
-  :thook (pre-command-hook . ((require 'ivy)))
-  :general
-  ("C-c C-r" 'ivy-resume)
-  (l-spc
-    "bb" 'ivy-switch-buffer)
-  (:keymaps 'ivy-minibuffer-map
-            [escape] 'minibuffer-keyboard-quit)
-  :config
+  :init
   (setq enable-recursive-minibuffers t)
   (setq ivy-use-selectable-prompt t
         ivy-use-virtual-buffers t
@@ -27,29 +20,48 @@
         ivy-on-del-error-function nil
 
         ivy-height 20
-	ivy-fixed-height-minibuffer t
+        ivy-fixed-height-minibuffer t
         ivy-count-format "(%d/%d) "
         ivy-format-function #'ivy-format-function-arrow
 
         ivy-on-del-error-function nil
         ivy-dynamic-exhibit-delay-ms 200)
+
+  (cm/add-temp-hook 'pre-command-hook
+    (require 'ivy))
+  :general
+  ("C-c C-r" 'ivy-resume)
+  (:keymaps 'ivy-minibuffer-map
+            [escape] 'minibuffer-keyboard-quit)
+  :config
   (ivy-mode +1))
 
 (use-package ivy-rich
   :hook
   (ivy-mode . ivy-rich-mode)
   (ivy-rich-mode . (lambda ()
-		     (setq ivy-virtual-abbreviate
-			   (or (and ivy-rich-mode 'abbreviate) 'name)))))
+                     (setq ivy-virtual-abbreviate
+                           (or (and ivy-rich-mode 'abbreviate) 'name)))))
 
 (use-package ivy-hydra
+  :preface
+  ;; use `hydra-ivy/body' automatically in some ivy-based functions
+  (defvar cm/ivy-auto-enable-hydra-list '(ivy-switch-buffer
+                                          counsel-recentf
+                                          cm/swiper-region-or-symbol))
   :init
+  (dolist (func cm/ivy-auto-enable-hydra-list)
+    (advice-add func :before (lambda (&rest _)
+                               (cm/add-temp-hook 'minibuffer-setup-hook
+                                 (hydra-ivy/body))
+                               (cm/add-temp-hook 'minibuffer-exit-hook
+                                 (hydra-ivy/nil)))))
   :general
   (:keymaps 'ivy-minibuffer-map
             "M-o" 'ivy-dispatching-done-hydra
-	    "M-SPC" 'hydra-ivy/body)
+            "M-SPC" 'hydra-ivy/body)
   (:keymaps 'hydra-ivy/keymap
-	    "M-SPC" 'hydra-ivy/nil))
+            "M-SPC" 'hydra-ivy/nil))
 
 ;; Swiper
 (use-package swiper
@@ -77,6 +89,8 @@ round point as the initial input."
   (l-spc                   
     "SPC"         'counsel-M-x
 
+    "bb"          'ivy-switch-buffer
+    
     "fr"          'counsel-recentf
     "ff"          'counsel-find-file
     "fL"          'counsel-find-library
@@ -120,18 +134,18 @@ round point as the initial input."
 
   ;; Use faster search tools: ripgrep or the silver search
   (let ((command
-	 (cond
-	  ((executable-find "rg")
-	   "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
-	  ((executable-find "pt")
-	   "pt -zS --nocolor --nogroup -e %s")
-	  (t counsel-grep-base-command))))
+         (cond
+          ((executable-find "rg")
+           "rg -i -M 120 --no-heading --line-number --color never '%s' %s")
+          ((executable-find "pt")
+           "pt -zS --nocolor --nogroup -e %s")
+          (t counsel-grep-base-command))))
     (setq counsel-grep-base-command command))
-
+ 
   (when (executable-find "rg")
     (setq counsel-git-cmd "rg --files")
     (setq counsel-rg-base-command
-	  "rg -i -M 120 --no-heading --line-number --color never %s .")))
+          "rg -i -M 120 --no-heading --line-number --color never %s .")))
 
 ;; Enchanced M-x
 (use-package amx
@@ -142,11 +156,11 @@ round point as the initial input."
 (use-package flx
   :init
   (setq ivy-re-builders-alist
-	'((counsel-grep . ivy--regex-plus)
-	  (counsel-rg   . ivy--regex-plus)
-	  (counsel-pt   . ivy--regex-plus)
-	  (swiper       . ivy--regex-plus)
-	  (t            . ivy--regex-fuzzy))))
+        '((counsel-grep . ivy--regex-plus)
+          (counsel-rg   . ivy--regex-plus)
+          (counsel-pt   . ivy--regex-plus)
+          (swiper       . ivy--regex-plus)
+          (t            . ivy--regex-fuzzy))))
 
 ;; World Time
 (use-package counsel-world-clock

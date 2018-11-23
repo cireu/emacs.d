@@ -14,11 +14,12 @@
 
 (use-package recentf
   :ensure nil
-  :thook (find-file . ((recentf-mode)
-                       (recentf-track-closed-file)))
   :init
   (setq recentf-save-file (expand-file-name "recentf" cm/cache-files-directory)
         recentf-max-saved-items 200)
+  (cm/add-temp-hook 'find-file-hook
+    (recentf-mode)
+    (recentf-track-opened-file))
   :config
   (dolist (file `(,(expand-file-name package-user-dir)
                   ,cm/cache-files-directory))))
@@ -28,6 +29,7 @@
   :hook (after-init . super-save-mode)
   :init
   (setq super-save-auto-save-when-idle t)
+  (setq auto-save-list-file-prefix (expand-file-name ".save-" (concat cm/cache-files-directory "/auto-save-list")))
   (setq auto-to-save-default nil))
 
 (provide 'init-basic)

@@ -10,8 +10,8 @@
     :prefix "SPC")
 
   ;; The leader for the major-mode functions
-  (general-create-definer l-semi :states '(n v)
-    :prefix ";")
+  (general-create-definer l-m :states '(n v)
+    :prefix "m")
 
   ;; The leader for just jump between the source
   (general-create-definer l-s :states '(n v)
@@ -32,20 +32,41 @@
   :general
   ;; Make Evil not so evil
   (nvmap
+    ;; "^" and "$" are hard to press, use emacs style key instead
     "C-a" 'evil-first-non-blank
     "C-e" 'evil-end-of-line
-    "s" nil ; "s" now reserved for the search-leader `l-s'
-    ;; "S" is generally equal to the "cc", so we make the "S" to act like the orginal"s"
-    "S" 'evil-substitute)
 
-  ;; "^" and "$" are hard to press, use emacs style key instead
+    ;; For leader
+    "s" nil
+    "m" nil
+
+    ;; "S" is generally equal to the "cc", so we make the "S" to act like the orginal "s"
+    "S" 'evil-substitute
+
+    "w" 'evil-forward-word-end
+    "W" 'evil-forward-WORD-end
+    
+    "e" 'evil-backward-word-begin
+    "E" 'evil-backward-WORD-begin
+
+    ;; don't be afraid, we have `evil-snipe'
+    "," 'evil-set-marker
+    ";" 'other-window
+
+    "." 'evil-replace
+    "r" 'evil-repeat
+
+    ;; `swiper' is much better!
+    "n" 'evil-yank
+    "N" 'evil-paste-after)
+
   (mmap
     "C-a" 'evil-first-non-blank
     "C-e" 'evil-end-of-line)
 
   (imap
     "C-a" 'evil-first-non-blank
-    "C-e" 'end-of-line ; `evil-end-of-line' won't go to the eol correctly
+    "C-e" 'end-of-line        ; `evil-end-of-line' won't go to the eol correctly
     "C-f" 'forward-char
     "C-b" 'backward-char
     "C-n" 'next-line
@@ -83,23 +104,23 @@
     "gx" 'evil-exchange
     "gX" 'evil-exchange))
 
-(use-package evil-matchit
-  :general
-  (nvmap
-    [remap evil-jump-item] 'evilmi-jump-items)
-  (itomap "%" 'evilmi-inner-text-object)
-  (otomap "%" 'evilmi-outer-text-object)
-  :config (global-evil-matchit-mode))
+;; (use-package evil-matchit
+;;   :general
+;;   (nvmap
+;;     [remap evil-jump-item] 'evilmi-jump-items)
+;;   (itomap "%" 'evilmi-inner-text-object)
+;;   (otomap "%" 'evilmi-outer-text-object)
+;;   :config (global-evil-matchit-mode))
 
 (use-package evil-nerd-commenter
   :general
-  (nvmap "gc" 'evilnc-comment-operator)
   (l-spc
-    "cl" 'evilnc-comment-or-uncomment-lines))
+    ";" 'evilnc-comment-operator))
 
 (use-package evil-surround
-  :thook ((evil-visual-state-entry-hook
-           evil-operator-state-entry-hook) . global-evil-surround-mode))
+  :init
+  (cm/add-temp-hook 'evil-insert-state-entry-hook (global-evil-surround-mode))
+  (cm/add-temp-hook 'evil-operator-state-entry-hook (global-evil-surround-mode)))
 
 ;; (use-package evil-embrace
 ;;   :hook (org-mode . embrace-org-mode)
@@ -121,9 +142,10 @@
                                        cm/cache-files-directory)
         keyfreq-file-lock (expand-file-name ".emacs.keyfreq.lock"
                                             cm/cache-files-directory))
-  :thook (pre-command-hook . ((require 'keyfreq)
-                              (keyfreq-mode +1)
-                              (keyfreq-autosave-mode +1))))
+  (cm/add-temp-hook 'pre-command-hook
+    (require 'keyfreq)
+    (keyfreq-mode +1)
+    (keyfreq-autosave-mode +1)))
 
 (provide 'init-evil)
 ;;; init-evil.el ends here

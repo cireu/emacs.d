@@ -2,39 +2,40 @@
 (use-package company
   :defines (company-dabbrev-ignore-case company-dabbrev-downcase)
   :defer 2
-  :thook (post-self-insert-hook . ((require 'company)))
   :preface
   (defvar company-enable-yas
     "Enable yasnippet for all backends")
   (defun company-backend-with-yas (backend)
     (if (or (not company-enable-yas)
-	    (and (listp backend) (member 'company-yasnippet backend)))
-	backend
+            (and (listp backend) (member 'company-yasnippet backend)))
+        backend
       (append (if (consp backend) backend (list backend))
-	      '(:with company-yasnippet))))
+              '(:with company-yasnippet))))
+  :init
+  (setq company-tooltip-align-annotations t ; aligns annotation to the right
+        company-tooltip-limit 12            ; bigger popup window
+        company-idle-delay .4               ; decrease delay before autocompletion popup shows
+        company-echo-delay 0                ; remove annoying blinking
+        company-minimum-prefix-length 2
+        company-require-match nil
+        company-dabbrev-ignore-case nil
+        company-dabbrev-downcase nil)
+  (setq company-show-numbers t)
+
+  (cm/add-temp-hook 'post-self-insert-hook
+    (require 'company))
   :general
   ("M-/" 'company-complete
    "C-c C-y" 'company-yasnippet)
   (:keymaps 'company-active-map
-	    "C-p" 'company-select-previous
-	    "C-n" 'company-select-next
-	    "TAB" 'company-complete-common-or-cycle
-	    "S-TAB" 'company-select-previous)
+            "C-p" 'company-select-previous
+            "C-n" 'company-select-next
+            "TAB" 'company-complete-common-or-cycle
+            "S-TAB" 'company-select-previous)
   (:keymaps 'company-search-map
-	    "C-p" 'company-select-previous
-	    "C-n" 'company-select-next)
+            "C-p" 'company-select-previous
+            "C-n" 'company-select-next)
   :config
-  (setq company-tooltip-align-annotations t ; aligns annotation to the right
-	company-tooltip-limit 12            ; bigger popup window
-	company-idle-delay .4               ; decrease delay before autocompletion popup shows
-	company-echo-delay 0                ; remove annoying blinking
-	company-minimum-prefix-length 2
-	company-require-match nil
-	company-dabbrev-ignore-case nil
-	company-dabbrev-downcase nil)
-  (setq company-show-numbers t)
-
-  ;;(company-statistics-mode)
   (global-company-mode +1))
 
 (use-package company-box
@@ -79,11 +80,14 @@
 
 ;; YASnippet
 (use-package yasnippet
+  :commands (yas-reload-all)
   :hook ((org-mode
           prog-mode
           snippet-mode) . yas-minor-mode-on)
-  :thook (yas-minor-mode-hook . ((yas-reload-all)))
-  :init (setq yas-snippet-dirs `(,(expand-file-name "snippets" cm/library-files-directory)))
+  :init
+  (setq yas-snippet-dirs `(,(expand-file-name "snippets" cm/library-files-directory)))
+  (cm/add-temp-hook 'yas-minor-mode-hook
+    (yas-reload-all))
   :general (:keymaps 'yas-minor-mode-map "TAB" 'yas-expand)
   :config
   (use-package yasnippet-snippets))

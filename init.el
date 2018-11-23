@@ -55,7 +55,7 @@
 (cm/load init-package)
 
 ;; Benchmark
-(cm/load init-benchmark)
+(cm/load init-benchmarking)
 
 ;; Key-bindings
 (cm/load init-evil)
@@ -65,6 +65,7 @@
 (cm/load init-ui)
 
 ;; Basic
+(cm/load init-window)
 (cm/load init-basic)
 (cm/load init-ivy)
 
@@ -81,8 +82,8 @@
 
 ;; ;; Programming Language
 ;; (cm/load init-jts)
+(cm/load init-emacs-lisp)
 ;; (cm/load init-common-lisp)
-;; (cm/load init-emacs-lisp)
 ;; (cm/load init-python)
 
 ;; ;; Chinese language support
