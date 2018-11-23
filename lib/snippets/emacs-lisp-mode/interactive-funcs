@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: interactive-funcs
+# key: ifun
+# --
+
+(defun $1 ($2)
+  "$3"
+  (interactive$4)
+  $0)

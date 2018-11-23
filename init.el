@@ -1,33 +1,29 @@
-;;; -*- lexical-binding: t; -*-
-(setq debug-on-error t)
+;;; -*- lexical-binding:t ; -*-
+;; (setq debug-on-error t)
 
 (eval-when-compile
   (let ((minver "26.1"))
     (when (version< emacs-version minver)
-      (error "Your Emacs don't support this config, use Emacs %s or above" minver))))
+      (error "Your Emacs don't support this config, use Emacs %s or above" minver)))
 
-;; Set up constants
-(defvar cm/config-files-directory (eval-when-compile
-				    (expand-file-name "etc" user-emacs-directory))
-  "The directory to store configuration files.")
+  (defvar cm/config-files-directory (expand-file-name "etc" user-emacs-directory)
+    "The directory to store configuration files.")
 
-(defvar cm/cache-files-directory (eval-when-compile
-				   (expand-file-name "var" user-emacs-directory))
-  "The directory to store the dotfiles create by different extensions.")
+  (defvar cm/cache-files-directory (expand-file-name "var" user-emacs-directory)
+    "The directory to store the dotfiles create by different extensions.")
 
-(defvar cm/library-files-directory (eval-when-compile
-				     (expand-file-name "lib" user-emacs-directory))
-  "The directory to store extensions files, whether from ELPA or Github.")
+  (defvar cm/library-files-directory (expand-file-name "lib" user-emacs-directory)
+    "The directory to store extensions files, whether from ELPA or Github.")
 
-(defvar cm/third-party-files-directory (eval-when-compile
-					 (expand-file-name "opt" user-emacs-directory))
-  "The directory to store third party binary tools.")
+  (defvar cm/third-party-files-directory (expand-file-name "opt" user-emacs-directory)
+    "The directory to store third party binary tools.")
 
-(unless (file-directory-p cm/cache-files-directory)
-  (mkdir cm/cache-files-directory))
+  (unless (file-directory-p cm/cache-files-directory)
+    (mkdir cm/cache-files-directory))
 
-;; Seperate customize file from init.el
-(setq custom-file (expand-file-name "custom.el" cm/config-files-directory))
+  (setq custom-file (expand-file-name "custom.el" cm/config-files-directory))
+
+  (when (file-exists-p custom-file) (load custom-file :no-error :no-message)))
 
 ;; Avoid Emacs do GC during the initializing
 (let ((init-time-gc-cons-threshold (* 100 1024 1024))
@@ -44,8 +40,6 @@
                                         gc-cons-percentage run-time-gc-cons-percentage)
                                   (add-hook 'focus-out-hook 'garbage-collect))))
 
-;; Load custom file
-(when (file-exists-p custom-file) (load custom-file))
 
 (defmacro cm/load (file)
   "Load my config files"
@@ -58,21 +52,21 @@
 (cm/load init-benchmarking)
 
 ;; Key-bindings
+(cm/load init-keybindings)
 (cm/load init-evil)
-(cm/load init-hydra)
 
 ;; UI
 (cm/load init-ui)
 
 ;; Basic
-(cm/load init-window)
+(cm/load init-windows)
 (cm/load init-basic)
 (cm/load init-ivy)
 
 ;; Better editing
 (cm/load init-edit)
 
-;; Completions (YAS and Company)
+;; Completions (YAS, Company and others)
 (cm/load init-completion)
 
 ;; ;; Markup-language

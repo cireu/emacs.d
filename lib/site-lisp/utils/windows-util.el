@@ -1,4 +1,4 @@
-;;;###autoload
+;;; -*- lexical-binding:t ; -*-
 (defun cm/alternate-buffer (&optional window)
   "Switch back and forth between current and last buffer in the
 current window."
@@ -12,4 +12,5 @@ current window."
                  (mapcar #'car (window-prev-buffers window)))
      nil t)))
 
-(provide 'init-funcs)
+(provide 'windows-util)
+;;; windows-util.el ends here

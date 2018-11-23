@@ -88,7 +88,6 @@
   (setq yas-snippet-dirs `(,(expand-file-name "snippets" cm/library-files-directory)))
   (cm/add-temp-hook 'yas-minor-mode-hook
     (yas-reload-all))
-  :general (:keymaps 'yas-minor-mode-map "TAB" 'yas-expand)
   :config
   (use-package yasnippet-snippets))
 
