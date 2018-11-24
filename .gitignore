@@ -13,3 +13,4 @@
 /var
 /etc/custom.el
 /eshell
+.yas-compiled-snippets.el
