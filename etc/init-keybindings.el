@@ -17,3 +17,15 @@
 
 ;; Hydra
 (use-package hydra)
+
+;; Record your key frequency
+(use-package keyfreq
+  :init
+  (setq keyfreq-file (expand-file-name ".emacs.keyfreq"
+                                       cm/cache-files-directory)
+        keyfreq-file-lock (expand-file-name ".emacs.keyfreq.lock"
+                                            cm/cache-files-directory))
+  (cm/add-temp-hook 'pre-command-hook
+    (require 'keyfreq)
+    (keyfreq-mode +1)
+    (keyfreq-autosave-mode +1)))

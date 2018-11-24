@@ -37,31 +37,31 @@
         (push (cons window buffer) shackle--popup-window-list))
       window))
 
-  (defun shackle-close-popup-window-hack (&rest _)
-    "Close current popup window via `C-g'."
-    (setq shackle--popup-window-list
-          (loop for (window . buffer) in shackle--popup-window-list
-                if (and (window-live-p window)
-                        (equal (window-buffer window) buffer))
-                collect (cons window buffer)))
-    ;; `C-g' can deactivate region
-    (when (and (called-interactively-p 'interactive)
-               (not (region-active-p)))
-      (let (window buffer)
-        (if (one-window-p)
-            (progn
-              (setq window (selected-window))
-              (when (equal (buffer-local-value 'shackle--current-popup-window
-                                               (window-buffer window))
-                           window)
-                (winner-undo)))
-          (setq window (caar shackle--popup-window-list))
-          (setq buffer (cdar shackle--popup-window-list))
-          (when (and (window-live-p window)
-                     (equal (window-buffer window) buffer))
-            (delete-window window)
+    (defun shackle-close-popup-window-hack ()
+     "Close current popup window via `C-g'."
+     (setq shackle--popup-window-list
+           (loop for (window . buffer) in shackle--popup-window-list
+                 if (and (window-live-p window)
+                         (equal (window-buffer window) buffer))
+                 collect (cons window buffer)))
+     ;; `C-g' can deactivate region
+     (when (and (called-interactively-p 'interactive)
+                (not (region-active-p)))
+       (let (window buffer)
+         (if (one-window-p)
+             (progn
+               (setq window (selected-window))
+               (when (equal (buffer-local-value 'shackle--current-popup-window
+                                                (window-buffer window))
+                            window)
+                 (winner-undo)))
+           (setq window (caar shackle--popup-window-list))
+           (setq buffer (cdar shackle--popup-window-list))
+           (when (and (window-live-p window)
+                      (equal (window-buffer window) buffer))
+             (delete-window window)
 
-            (pop shackle--popup-window-list))))))
+             (pop shackle--popup-window-list))))))
 
   (advice-add #'keyboard-quit :before #'shackle-close-popup-window-hack)
   (advice-add #'shackle-display-buffer :around #'shackle-display-buffer-hack)
@@ -110,101 +110,12 @@
   
   :hook (after-init . windmove-default-keybindings))
 
-;;; Functions
-(defun hydra-move-splitter-left (arg)
-  "Move window splitter left."
-  (interactive "p")
-  (if (let* ((windmove-wrap-around))
-        (windmove-find-other-window 'right))
-      (shrink-window-horizontally arg)
-    (enlarge-window-horizontally arg)))
-
-(defun hydra-move-splitter-right (arg)
-  "Move window splitter right."
-  (interactive "p")
-  (if (let* ((windmove-wrap-around))
-        (windmove-find-other-window 'right))
-      (enlarge-window-horizontally arg)
-    (shrink-window-horizontally arg)))
-
-(defun hydra-move-splitter-up (arg)
-  "Move window splitter up."
-  (interactive "p")
-  (if (let* ((windmove-wrap-around))
-        (windmove-find-other-window 'up))
-      (enlarge-window arg)
-    (shrink-window arg)))
-
-(defun hydra-move-splitter-down (arg)
-  "Move window splitter down."
-  (interactive "p")
-  (if (let* ((windmove-wrap-around))
-        (windmove-find-other-window 'up))
-      (shrink-window arg)
-    (enlarge-window arg)))
-
-
-
-
-;; Keybindings
-(l-spc
-  "w" (defhydra hydra-window ()
-  "
-Movement^^   ^Split^         ^Switch^     ^Resize^
------------------------------------------------------
-_h_ Left     _3_ vertical    _b_uffer     _q_ X left
-_j_ Down     _2_ horizontal  _f_ind files _w_ X Down
-_k_ Top      _z_ undo        _a_ce 1      _e_ X Top
-_l_ Right    _Z_ reset       _s_wap       _r_ X Right
-_F_ollow     _D_elete Other  _S_ave       max_i_mize
-_SPC_ cancel _o_nly this     _d_elete     _B_alance 
-"
-  ("h" windmove-left )
-  ("j" windmove-down )
-  ("k" windmove-up )
-  ("l" windmove-right )
-  ("B" balance-windows)
-  ("q" hydra-move-splitter-left)
-  ("w" hydra-move-splitter-down)
-  ("e" hydra-move-splitter-up)
-  ("r" hydra-move-splitter-right)
-  ("b" ivy-switch-buffer)
-  ("f" counsel-find-file)
-  ("F" follow-mode)
-  ("a" (lambda ()
-         (interactive)
-         (ace-window 1)
-         (add-hook 'ace-window-end-once-hook
-                   'hydra-window/body)))
-  ("3" (lambda ()
-         (interactive)
-         (split-window-right)
-         (windmove-right)))
-  ("2" (lambda ()
-         (interactive)
-         (split-window-below)
-         (windmove-down)))
-  ("s" (lambda ()
-         (interactive)
-         (ace-window 4)
-         (add-hook 'ace-window-end-once-hook
-                   'hydra-window/body)))
-  ("S" save-buffer)
-  ("d" delete-window)
-  ("D" (lambda ()
-         (interactive)
-         (ace-window 16)
-         (add-hook 'ace-window-end-once-hook
-                   'hydra-window/body)))
-  ("o" delete-other-windows)
-  ("i" ace-delete-other-windows)
-  ("z" (progn
-         (winner-undo)
-         (setq this-command 'winner-undo)))
-  ("Z" winner-redo)
-  ("SPC" nil))
-
-  "<tab>" 'cm/alternate-buffer)
+(use-package windows-util
+  :ensure nil
+  :general
+  (l-spc
+    "w" 'hydra-window/body
+    "<tab>" 'cm/alternate-buffer))
 
 (provide 'init-windows)
 ;;; init-windows.el ends here

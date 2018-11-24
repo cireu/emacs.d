@@ -32,16 +32,18 @@
   (cm/add-temp-hook #'org-mode
     (doom-themes-org-config)))
 
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-init))
 
 ;; Show necessary meta-data in minibuffer instead of using mode-line
-(use-package awesome-tray
-  :load-path "lib/site-lisp/awesome-tray"
-  :commands awesome-tray-mode
-  :init
-  (setq awesome-tray-mode-line-active-color "#3f444a"
-        awesome-tray-git-update-duration 30
-        awesome-tray-active-modules '("parent-dir" "git" "mode-name" "date"))
-  :hook (after-init . awesome-tray-mode))
+;; (use-package awesome-tray
+;;   :load-path "lib/site-lisp/awesome-tray"
+;;   :commands awesome-tray-mode
+;;   :init
+;;   (setq awesome-tray-mode-line-active-color "#3f444a"
+;;         awesome-tray-git-update-duration 30
+;;         awesome-tray-active-modules '("parent-dir" "git" "mode-name" "date"))
+;;   :hook (after-init . awesome-tray-mode))
 
 ;; All-the-icons
 (use-package all-the-icons
@@ -55,6 +57,10 @@
 (setq line-move-visual nil)
 (setq track-eol t) ; Keep the cursor at the end of the line. Requires the `line-move-visual' is nil
 (setq inhibit-compacting-font-caches t)
+
+;; Prettify Symbol
+(add-hook 'org-mode-hook #'global-prettify-symbols-mode)
+(add-hook 'prog-mode-hook #'global-prettify-symbols-mode)
 
 ;; Stop the blinking cursor
 (blink-cursor-mode -1)

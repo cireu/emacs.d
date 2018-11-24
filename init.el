@@ -4,26 +4,26 @@
 (eval-when-compile
   (let ((minver "26.1"))
     (when (version< emacs-version minver)
-      (error "Your Emacs don't support this config, use Emacs %s or above" minver)))
+      (error "Your Emacs don't support this config, use Emacs %s or above" minver))))
 
-  (defvar cm/config-files-directory (expand-file-name "etc" user-emacs-directory)
-    "The directory to store configuration files.")
+(defvar cm/config-files-directory (expand-file-name "etc" user-emacs-directory)
+  "The directory to store configuration files.")
 
-  (defvar cm/cache-files-directory (expand-file-name "var" user-emacs-directory)
-    "The directory to store the dotfiles create by different extensions.")
+(defvar cm/cache-files-directory (expand-file-name "var" user-emacs-directory)
+  "The directory to store the dotfiles create by different extensions.")
 
-  (defvar cm/library-files-directory (expand-file-name "lib" user-emacs-directory)
-    "The directory to store extensions files, whether from ELPA or Github.")
+(defvar cm/library-files-directory (expand-file-name "lib" user-emacs-directory)
+  "The directory to store extensions files, whether from ELPA or Github.")
 
-  (defvar cm/third-party-files-directory (expand-file-name "opt" user-emacs-directory)
-    "The directory to store third party binary tools.")
+(defvar cm/third-party-files-directory (expand-file-name "opt" user-emacs-directory)
+  "The directory to store third party binary tools.")
 
-  (unless (file-directory-p cm/cache-files-directory)
-    (mkdir cm/cache-files-directory))
+(unless (file-directory-p cm/cache-files-directory)
+  (mkdir cm/cache-files-directory))
 
-  (setq custom-file (expand-file-name "custom.el" cm/config-files-directory))
+(setq custom-file (expand-file-name "custom.el" cm/config-files-directory))
 
-  (when (file-exists-p custom-file) (load custom-file :no-error :no-message)))
+(when (file-exists-p custom-file) (load custom-file :no-error :no-message))
 
 ;; Avoid Emacs do GC during the initializing
 (let ((init-time-gc-cons-threshold (* 100 1024 1024))
@@ -84,11 +84,11 @@
 ;; (cm/load init-chinese)
 
 ;; ;; File-managemnet
-;; (cm/load init-dired)
+(cm/load init-ranger)
 ;; (cm/load init-treemacs)
 
 ;; ;; Applications
-;; (cm/load init-eshell)
+(cm/load init-shell)
 ;; (cm/load init-wanderlust)
 ;; (cm/load init-gnus)
 ;; (cm/load init-emms)

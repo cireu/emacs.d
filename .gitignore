@@ -12,3 +12,4 @@
 ## Private files
 /var
 /etc/custom.el
+/eshell

@@ -30,6 +30,9 @@
   (push default-directory load-path)
   (normal-top-level-add-subdirs-to-load-path))
 
+;; Load util-funcs
+;; (push (expand-file-name "utils" cm/site-lisp-directory) load-path)
+
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))

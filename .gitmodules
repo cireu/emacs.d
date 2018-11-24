@@ -1,9 +1,12 @@
-[submodule "lib/site-lisp/awesome-tray"]
-	path = lib/site-lisp/awesome-tray
-	url = https://github.com/manateelazycat/awesome-tray
 [submodule "lib/site-lisp/color-rg"]
 	path = lib/site-lisp/color-rg
 	url = https://github.com/manateelazycat/color-rg
 [submodule "lib/site-lisp/lpy"]
 	path = lib/site-lisp/lpy
 	url = https://github.com/abo-abo/lpy
+[submodule "lib/site-lisp/aweshell"]
+	path = lib/site-lisp/aweshell
+	url = https://github.com/manateelazycat/aweshell
+[submodule "lib/site-lisp/tiny"]
+	path = lib/site-lisp/tiny
+	url = https://github.com/abo-abo/tiny

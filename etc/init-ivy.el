@@ -65,19 +65,10 @@
 
 ;; Swiper
 (use-package swiper
-  :preface
-  (defun cm/swiper-region-or-symbol ()
-    "Run `swiper' with the selected region or the symbol
-round point as the initial input."
-    (interactive)
-    (let ((input (if (region-active-p)
-                     (buffer-substring-no-properties
-                      (region-beginning) (region-end))
-                   (thing-at-point 'symbol t))))
-      (swiper input)))
   :general
   ("C-s" 'swiper)
-  (nvmap "#" 'cm/swiper-region-or-symbol)
+  (l-s
+    "s" 'swiper)
   (:keymaps 'swiper-map
             "M-q" 'swiper-query-replace)
   :config
@@ -167,6 +158,12 @@ round point as the initial input."
   :general
   (l-spc
     "ak" 'counsel-world-clock))
+
+(use-package ivy-util
+  :ensure nil
+  :general
+  (l-s
+    "i" 'cm/swiper-region-or-symbol))
 
 (provide 'init-ivy)
 ;; init-ivy.el ends here

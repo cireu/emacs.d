@@ -32,11 +32,11 @@
 (use-package avy
   :general
   (l-s
-    "s" 'avy-goto-char-2
+    "j" 'avy-goto-char-2
     "l" 'avy-goto-line)
   :config
   (setq avy-background t
-	avy-all-windows nil)
+        avy-all-windows nil)
   (avy-setup-default))
 
 ;; Jump between links
@@ -52,19 +52,19 @@
     "v" 'er/expand-region
     "V" 'er/contract-region))
 
-;; (use-package hide-show
-;;   :ensure nil
-;;   :general
-;;   (:keymaps 'hs-minor-mode-map
-;;             "C-`" 'hs-toggle-hiding))
+(use-package hide-show
+  :ensure nil
+  :general
+  (l-spc :keymaps 'hs-minor-mode-map
+    "hs" 'hs-toggle-hiding))
 
 (use-package aggressive-indent
   :hook ((prog-mode . global-aggressive-indent-mode)
          ;; Disable in big file due to the performance issues
          ;; https://github.com/Malabarba/aggressive-indent-mode/issues/73
          (find-file . (lambda ()
-                        (when (> (buffer-size) (* 3000 80)))
-                          (aggressive-indent-mode -1))))
+                        (when (> (buffer-size) (* 3000 80))
+                          (aggressive-indent-mode -1)))))
   :config
   ;; Disable in some mode
   (dolist (mode '(html-mode web-mode css-mode))
@@ -95,17 +95,17 @@
   ;; language, this is a work-around to fix it
   (defun paredit/space-for-delimiter-p (endp delim)
     (or (member 'font-lock-keyword-face (text-properties-at (1- (point))))
-	(not (derived-mode-p ;; 'js2-mode
-	      ;; 'typescript-mode
-	      'python-mode))))
+        (not (derived-mode-p ;; 'js2-mode
+              ;; 'typescript-mode
+              'python-mode))))
   :hook ((;; js2-mode
-	  ;; typescript-mode
-	  python-mode
-	  lisp-mode
-	  lisp-interaction-mode
-	  emacs-lisp-mode
-	  ielm-mode
-	  slime-repl-mode-hook) . paredit-mode)
+          ;; typescript-mode
+          ;; python-mode
+          lisp-mode
+          lisp-interaction-mode
+          emacs-lisp-mode
+          ielm-mode
+          slime-repl-mode-hook) . paredit-mode)
   :config (add-to-list 'paredit-space-for-delimiter-predicates #'paredit/space-for-delimiter-p))
 
 ;;; Darkroom mode

@@ -1,3 +1,5 @@
+;;; -*- lexical-binding:t ; -*-
+
 ;; Company
 (use-package company
   :defines (company-dabbrev-ignore-case company-dabbrev-downcase)
@@ -25,8 +27,7 @@
   (cm/add-temp-hook 'post-self-insert-hook
     (require 'company))
   :general
-  ("M-/" 'company-complete
-   "C-c C-y" 'company-yasnippet)
+  ("C-c s" 'company-yasnippet)
   (:keymaps 'company-active-map
             "C-p" 'company-select-previous
             "C-n" 'company-select-next
@@ -91,5 +92,18 @@
   :config
   (use-package yasnippet-snippets))
 
-(provide 'init-progs)
-;;; init-progs.el ends here
+;; Hippie expand
+(use-package hippie-expand
+  :ensure nil
+  :general
+  ("M-/" 'hippie-expand)
+  :init
+  (setq hippie-expand-try-functions-list
+        '(try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill)))
+
+(provide 'init-completion)
+;;; init-completion.el ends here
