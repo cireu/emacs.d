@@ -32,8 +32,8 @@
 (use-package avy
   :general
   (l-s
-    "j" 'avy-goto-char-2
-    "l" 'avy-goto-line)
+    "f" 'avy-goto-char-2
+    ";" 'avy-goto-line)
   :config
   (setq avy-background t
         avy-all-windows nil)
@@ -54,9 +54,11 @@
 
 (use-package hide-show
   :ensure nil
+  :hook ((prog-mode
+          org-mode) . hs-minor-mode)
   :general
   (l-spc :keymaps 'hs-minor-mode-map
-    "hs" 'hs-toggle-hiding))
+    "os" 'hs-toggle-hiding))
 
 (use-package aggressive-indent
   :hook ((prog-mode . global-aggressive-indent-mode)

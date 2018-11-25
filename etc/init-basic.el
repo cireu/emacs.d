@@ -1,5 +1,10 @@
 ;;; -*- lexical-binding:t ; -*-
 
+;; `*scratch*' buffer
+(setq-default initial-scratch-message "")
+
+(setq initial-major-mode #'text-mode)
+
 (use-package savehist
   :ensure nil
   :hook (after-init . savehist-mode)

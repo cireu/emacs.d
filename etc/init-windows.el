@@ -37,31 +37,31 @@
         (push (cons window buffer) shackle--popup-window-list))
       window))
 
-    (defun shackle-close-popup-window-hack ()
-     "Close current popup window via `C-g'."
-     (setq shackle--popup-window-list
-           (loop for (window . buffer) in shackle--popup-window-list
-                 if (and (window-live-p window)
-                         (equal (window-buffer window) buffer))
-                 collect (cons window buffer)))
-     ;; `C-g' can deactivate region
-     (when (and (called-interactively-p 'interactive)
-                (not (region-active-p)))
-       (let (window buffer)
-         (if (one-window-p)
-             (progn
-               (setq window (selected-window))
-               (when (equal (buffer-local-value 'shackle--current-popup-window
-                                                (window-buffer window))
-                            window)
-                 (winner-undo)))
-           (setq window (caar shackle--popup-window-list))
-           (setq buffer (cdar shackle--popup-window-list))
-           (when (and (window-live-p window)
-                      (equal (window-buffer window) buffer))
-             (delete-window window)
+  (defun shackle-close-popup-window-hack ()
+    "Close current popup window via `C-g'."
+    (setq shackle--popup-window-list
+          (cl-loop for (window . buffer) in shackle--popup-window-list
+                   if (and (window-live-p window)
+                           (equal (window-buffer window) buffer))
+                   collect (cons window buffer)))
+    ;; `C-g' can deactivate region
+    (when (and (called-interactively-p 'interactive)
+               (not (region-active-p)))
+      (let (window buffer)
+        (if (one-window-p)
+            (progn
+              (setq window (selected-window))
+              (when (equal (buffer-local-value 'shackle--current-popup-window
+                                               (window-buffer window))
+                           window)
+                (winner-undo)))
+          (setq window (caar shackle--popup-window-list))
+          (setq buffer (cdar shackle--popup-window-list))
+          (when (and (window-live-p window)
+                     (equal (window-buffer window) buffer))
+            (delete-window window)
 
-             (pop shackle--popup-window-list))))))
+            (pop shackle--popup-window-list))))))
 
   (advice-add #'keyboard-quit :before #'shackle-close-popup-window-hack)
   (advice-add #'shackle-display-buffer :around #'shackle-display-buffer-hack)
@@ -91,7 +91,18 @@
           ("^ ?\\*" :regexp t :select t :align 'below :autoclose t))))
 
 (use-package window-numbering
-  :hook (after-init . window-numbering-mode))
+  :hook (after-init . window-numbering-mode)
+  :general
+  (l-spc
+    "1" 'select-window-1
+    "2" 'select-window-2
+    "3" 'select-window-3
+    "4" 'select-window-4
+    "5" 'select-window-5
+    "6" 'select-window-6
+    "7" 'select-window-7
+    "8" 'select-window-8
+    "9" 'select-window-9))
 
 ;; Quickly switch windows
 (use-package ace-window
@@ -115,7 +126,11 @@
   :general
   (l-spc
     "w" 'hydra-window/body
-    "<tab>" 'cm/alternate-buffer))
+    "TAB" 'cm/alternate-buffer
+    "RET" 'other-window
+    ;; Buffers
+    "bs" 'cm/switch-to-scratch-buffer
+    "bm" 'cm/switch-to-message-buffer))
 
 (provide 'init-windows)
 ;;; init-windows.el ends here

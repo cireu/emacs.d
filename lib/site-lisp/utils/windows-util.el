@@ -100,5 +100,19 @@ _SPC_ cancel _o_nly this     _d_elete     _B_alance
   ("Z" winner-redo)
   ("SPC" nil))
 
+
+(defun cm/switch-to-scratch-buffer ()
+  "Switch to the `*scratch*' buffer. Create it first if needed."
+  (interactive)
+  (let ((exists (get-buffer "*scratch*")))
+    (switch-to-buffer (get-buffer-create "*scratch*"))))
+
+(defun cm/switch-to-message-buffer ()
+  "Switch to the `*Messages*' buffer. Create it first if needed"
+  (interactive)
+  (let ((exists (get-buffer "*Messages*")))
+    (switch-to-buffer (get-buffer-create "*Messages*"))))
+
+
 (provide 'windows-util)
 ;;; windows-util.el ends here

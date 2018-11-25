@@ -5,7 +5,7 @@
   :defines (company-dabbrev-ignore-case company-dabbrev-downcase)
   :defer 2
   :preface
-  (defvar company-enable-yas
+  (defvar company-enable-yas t
     "Enable yasnippet for all backends")
   (defun company-backend-with-yas (backend)
     (if (or (not company-enable-yas)
@@ -23,9 +23,6 @@
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil)
   (setq company-show-numbers t)
-
-  (cm/add-temp-hook 'post-self-insert-hook
-    (require 'company))
   :general
   ("C-c s" 'company-yasnippet)
   (:keymaps 'company-active-map
@@ -37,7 +34,11 @@
             "C-p" 'company-select-previous
             "C-n" 'company-select-next)
   :config
-  (global-company-mode +1))
+  (global-company-mode +1)
+
+  ;; Support yas in commpany
+  ;; Note: Must be the last to involve all backends
+  (setq company-backends (mapcar #'company-backend-with-yas company-backends)))
 
 (use-package company-box
   :hook (company-mode . company-box-mode)
@@ -91,6 +92,12 @@
     (yas-reload-all))
   :config
   (use-package yasnippet-snippets))
+
+(use-package yas-util
+  :ensure nil
+  :general
+  (l-spc
+    "is" 'cm/yas-expand-on-region-or-insert))
 
 ;; Hippie expand
 (use-package hippie-expand

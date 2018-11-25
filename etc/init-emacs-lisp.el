@@ -1,9 +1,5 @@
 ;; -*- lexical-binding: t; -*-
 
-;; More friendly greetings from Emacs!
-(setq-default initial-scratch-message
-              (concat ";; Happy hacking, " user-login-name " - Emacs ♥ you!\n\n"))
-
 ;; `elisp-mode' is loaded at startup. In order to lazyload its config we need
 ;; to prevent it isn't loaded
 (delq 'elisp-mode features)

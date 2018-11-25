@@ -1,7 +1,7 @@
 ;;; -*- lexical-binding:t ; -*-
 
 (use-package ranger
-  :defer 1
+  :defer 3
   :general
   (l-spc
     "ar" 'ranger
@@ -14,7 +14,9 @@
         ranger-excluded-extensions '("mkv" "iso" "mp4")
         ranger-dont-show-binary t
         ranger-max-preview-size 10)
-  (cm/add-temp-hook 'pre-command-hook
+  (cm/add-temp-hook #'find-file
+    (require 'ranger))
+  (cm/add-temp-hook #'dired
     (require 'ranger))
   :config
   (ranger-override-dired-mode +1))

@@ -9,11 +9,12 @@
 
   ;; The leader for the major-mode functions
   (general-create-definer l-m :states '(n v)
-    :prefix "m")
+    :prefix ",")
 
   ;; The leader for just jump between the source
   (general-create-definer l-s :states '(n v)
     :prefix "s"))
+
 
 ;; Hydra
 (use-package hydra)

@@ -19,14 +19,7 @@
 
     ;; For leader
     "s" nil
-    "m" nil
-
-    ;; "S" is generally equal to the "cc", so we make the "S" to act like the orginal "s"
-    "S" 'evil-substitute
-
-    ;; don't be afraid, we have `evil-snipe'
-    "," 'evil-set-marker
-    ";" 'other-window)
+    "S" 'evil-substitute)
 
   (mmap
     "C-a" 'evil-first-non-blank
@@ -44,7 +37,9 @@
     "C-k" 'kill-line)
 
   ;; Rebound Universal arg to "SPC u"
-  (l-spc "u" 'universal-argument))
+  (l-spc
+    "u" 'universal-argument
+    ";" 'evil-ex))
 
 (use-package evil-snipe
   ;; Only I want is smart f/F/t/T, `avy' will do the rest of the work
@@ -62,9 +57,9 @@
 
 (use-package evil-lion
   :general
-  (nvmap
-    "gl" 'evil-lion-left
-    "gL" 'evil-lion-right)
+  (l-spc
+    "l" 'evil-lion-left
+    "L" 'evil-lion-right)
   :config (evil-lion-mode))
 
 (use-package evil-exchange
@@ -94,7 +89,7 @@
   :general
   (l-spc
     "au" 'undo-tree-visualize)
-  :config (global-undo-tree-mode))
+  :config (global-undo-tree-mode +1))
 
 (provide 'init-evil)
 ;;; init-evil.el ends here
