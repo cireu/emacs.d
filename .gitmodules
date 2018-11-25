@@ -10,3 +10,12 @@
 [submodule "lib/site-lisp/tiny"]
 	path = lib/site-lisp/tiny
 	url = https://github.com/abo-abo/tiny
+[submodule "lib/site-lisp/insert-translated-name"]
+	path = lib/site-lisp/insert-translated-name
+	url = https://github.com/manateelazycat/insert-translated-name
+[submodule "lib/site-lisp/company-english-helper"]
+	path = lib/site-lisp/company-english-helper
+	url = https://github.com/manateelazycat/company-english-helper
+[submodule "lib/site-lisp/grep-dired"]
+	path = lib/site-lisp/grep-dired
+	url = https://github.com/manateelazycat/grep-dired
