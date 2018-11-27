@@ -18,13 +18,13 @@
   :hook (after-init . shackle-mode)
   :config
   (defun view-last-popup-buffer ()
-    "View last popup buffer."
+    "view last popup buffer."
     (interactive)
     (ignore-errors
       (display-buffer shackle-last-buffer)))
-  (bind-key "C-h z" #'view-last-popup-buffer)
+  (l-spc "bp" 'view-last-popup-buffer)
 
-  ;; Add keyword: `autoclose'
+  ;; add keyword: `autoclose'
   (defvar shackle--popup-window-list nil) ; all popup windows
   (defvar-local shackle--current-popup-window nil) ; current popup window
   (put 'shackle--current-popup-window 'permanent-local t)
@@ -38,7 +38,7 @@
       window))
 
   (defun shackle-close-popup-window-hack ()
-    "Close current popup window via `C-g'."
+    "close current popup window via `C-g'."
     (setq shackle--popup-window-list
           (cl-loop for (window . buffer) in shackle--popup-window-list
                    if (and (window-live-p window)
@@ -69,21 +69,21 @@
   ;; rules
   (setq shackle-default-size 0.4)
   (setq shackle-rules
-        '(("*Help*" :select t :align 'below :autoclose t)
+        '(("*help*" :select t :align 'below :autoclose t)
           ("*compilation*" :size 0.25 :align 'below :autoclose t)
-          ("*Completions*" :size 0.3 :align 'below :autoclose t)
-          ("*Pp Eval Output*" :size 0.25 :align 'below :autoclose t)
+          ("*completions*" :size 0.3 :align 'below :autoclose t)
+          ("*pp eval output*" :size 0.25 :align 'below :autoclose t)
           ("*ert*" :same t)
           ("*info*" :select t :inhibit-window-quit t :same t)
-          ("*Backtrace*" :select t :size 20 :align 'below)
-          ("*Warnings*" :size 12 :align 'below :autoclose t)
-          ("*Messages*" :size 12 :align 'below :autoclose t)
-          ("^\\*.*Shell Command.*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
-          ("\\*[Wo]*Man.*\\*" :regexp t :select t :other t :inhibit-window-quit t)
-          ("*Calendar*" :select t :size 0.3 :align 'below)
+          ("*backtrace*" :select t :size 20 :align 'below)
+          ("*warnings*" :size 12 :align 'below :autoclose t)
+          ("*messages*" :size 12 :align 'below :autoclose t)
+          ("^\\*.*shell command.*\\*$" :regexp t :size 0.3 :align 'below :autoclose t)
+          ("\\*[wo]*man.*\\*" :regexp t :select t :other t :inhibit-window-quit t)
+          ("*calendar*" :select t :size 0.3 :align 'below)
           (" *undo-tree*" :select t)
           (apropos-mode :size 0.3 :align 'below :autoclose t)
-          (Buffer-menu-mode :size 20 :align 'below :autoclose t)
+          (buffer-menu-mode :size 20 :align 'below :autoclose t)
           (comint-mode :align 'below)
           (grep-mode :size 25 :align 'below :autoclose t)
           (profiler-report-mode :popup t)
@@ -91,46 +91,31 @@
           ("^ ?\\*" :regexp t :select t :align 'below :autoclose t))))
 
 (use-package window-numbering
-  :hook (after-init . window-numbering-mode)
-  :general
-  (l-spc
-    "1" 'select-window-1
-    "2" 'select-window-2
-    "3" 'select-window-3
-    "4" 'select-window-4
-    "5" 'select-window-5
-    "6" 'select-window-6
-    "7" 'select-window-7
-    "8" 'select-window-8
-    "9" 'select-window-9))
+  :hook (after-init . window-numbering-mode))
 
 ;; Quickly switch windows
-(use-package ace-window
-  :commands (ace-window)
-  :custom-face
-  (aw-leading-char-face ((t (:inherit 'font-lock-keyword-face :height 2.0))))
-  (aw-mode-line-face    ((t (:inherit 'mode-line-emphasis :bold t))))
-  :config
-  (ace-window-display-mode))
+;; (use-package ace-window
+;;   :commands (ace-window)
+;;   :custom-face
+;;   (aw-leading-char-face ((t (:inherit 'font-lock-keyword-face :height 2.0))))
+;;   (aw-mode-line-face    ((t (:inherit 'mode-line-emphasis :bold t))))
+;;   :config
+;;   (ace-window-display-mode))
 
-(use-package windmove
-  :preface
-  ;; 
-  :ensure nil
-  :general
-  
-  :hook (after-init . windmove-default-keybindings))
+;; (use-package windmove
+;;   :ensure nil
+;;   :hook (after-init . windmove-default-keybindings))
 
-(use-package windows-util
+(use-package windows-funcs
   :ensure nil
   :general
   (l-spc
-    "w" 'hydra-window/body
+    "w"   'hydra-window/body
     "TAB" 'cm/alternate-buffer
     "RET" 'other-window
     ;; Buffers
-    "bs" 'cm/switch-to-scratch-buffer
-    "bm" 'cm/switch-to-message-buffer))
+    "bs"  'cm/switch-to-scratch-buffer
+    "bm"  'cm/switch-to-message-buffer))
 
 (provide 'init-windows)
 ;;; init-windows.el ends here

@@ -18,7 +18,7 @@
           (lambda ()
             (turn-on-auto-fill)))
 
-(setq sentence-end "\\([„ÄÇÔºÅÔºü]\\|‚Ä¶‚Ä¶\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
+(setq sentence-end "\\([°££°£ø]\\|°≠°≠\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
 (setq sentence-end-double-space nil)
 
 ;;; Tab and Space
@@ -27,22 +27,28 @@
               tab-width        2
               indent-tabs-mode nil)
 
-;;; jump and navigation
+;;; Jump and navigation
 ;; Jump to wherever we can
-(use-package avy
-  :general
-  (l-s
-    "f" 'avy-goto-char-2
-    ";" 'avy-goto-line)
-  :config
-  (setq avy-background t
-        avy-all-windows nil)
-  (avy-setup-default))
+;; (use-package avy
+;;   :general
+;;   (l-spc
+;;     "g" 'avy-goto-line
+;;     ";" 'avy-goto-char-timer)
+;;   (nvmap
+;;     "f" 'avy-goto-char-in-line)
+;;   (mmap
+;;     "f" 'avy-goto-char-in-line)
+;;   :config
+;;   (setq avy-timeout-seconds 0.3
+;;         avy-background nil
+;;         avy-all-windows t)
+;;   (setq avy-keys '(?a ?s ?d ?f ?j ?k ?l ?\; ?w ?e ?i ?o ?v ?m))
+;;   (avy-setup-default))
 
 ;; Jump between links
-(use-package ace-link
-  :general
-  ("M-g l" 'ace-link-addr))
+;; (use-package ace-link
+;;   :general
+;;   ("M-g l" 'ace-link-addr))
 
 ;;; Region Operation
 ;; Expand-region
@@ -79,36 +85,37 @@
    [remap query-replace-regexp] 'anzu-query-replace-regexp
    [remap isearch-query-replace] 'anzu-isearch-query-replace
    [remap isearch-query-replace-regexp] 'anzu-isearch-query-replace-regexp)
-  (l-s
-    "3" 'anzu-query-replace
-    "#" 'anzu-query-replace-regexp
-    "4" 'anzu-query-replace-at-cursor-things))
+  ("Q" 'anzu-query-replace-regexp))
 
 ;; Line number
 (use-package display-line-numbers
   :when (fboundp 'display-line-numbers-mode)
   :ensure nil
+  :init (setq display-line-numbers-type 'relative)
   :hook (prog-mode . display-line-numbers-mode))
 
 ;; Paredit
-(use-package paredit
-  :preface
-  ;; Paredit will add space when you type delimiters, which is annoying in non-lisp
-  ;; language, this is a work-around to fix it
-  (defun paredit/space-for-delimiter-p (endp delim)
-    (or (member 'font-lock-keyword-face (text-properties-at (1- (point))))
-        (not (derived-mode-p ;; 'js2-mode
-              ;; 'typescript-mode
-              'python-mode))))
-  :hook ((;; js2-mode
-          ;; typescript-mode
-          ;; python-mode
-          lisp-mode
-          lisp-interaction-mode
-          emacs-lisp-mode
-          ielm-mode
-          slime-repl-mode-hook) . paredit-mode)
-  :config (add-to-list 'paredit-space-for-delimiter-predicates #'paredit/space-for-delimiter-p))
+;; (use-package paredit
+;;   :preface
+;;   ;; Paredit will add space when you type delimiters, which is annoying in non-lisp
+;;   ;; language, this is a work-around to fix it
+;;   (defun paredit/space-for-delimiter-p (endp delim)
+;;     (or (member 'font-lock-keyword-face (text-properties-at (1- (point))))
+;;         (not (derived-mode-p ;; 'js2-mode
+;;               ;; 'typescript-mode
+;;               'python-mode))))
+;;   :hook ((;; js2-mode
+;;           ;; typescript-mode
+;;           ;; python-mode
+;;           lisp-mode
+;;           lisp-interaction-mode
+;;           emacs-lisp-mode
+;;           ielm-mode
+;;           slime-repl-mode-hook) . paredit-mode)
+;;   :config (add-to-list 'paredit-space-for-delimiter-predicates #'paredit/space-for-delimiter-p))
+
+(use-package smartparens
+  :hook ((org-mode prog-mode) . smartparens-global-mode))
 
 ;;; Darkroom mode
 (use-package darkroom

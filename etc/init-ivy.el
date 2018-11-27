@@ -49,13 +49,13 @@
   (defvar cm/ivy-auto-enable-hydra-list '(ivy-switch-buffer
                                           counsel-recentf
                                           cm/swiper-region-or-symbol))
+  ;; FIXME Force `ivy-hydra' exit when quit minibuffer
+  :hook (minibuffer-exit-hook . hydra-ivy/nil)
   :init
   (dolist (func cm/ivy-auto-enable-hydra-list)
     (advice-add func :before (lambda (&rest _)
                                (cm/add-temp-hook 'minibuffer-setup-hook
-                                 (hydra-ivy/body))
-                               (cm/add-temp-hook 'minibuffer-exit-hook
-                                 (hydra-ivy/nil)))))
+                                 (hydra-ivy/body)))))
   :general
   (:keymaps 'ivy-minibuffer-map
             "M-o" 'ivy-dispatching-done-hydra
@@ -78,24 +78,23 @@
   :general
   ([remap swiper] 'counsel-grep-or-swiper)
   (l-spc                   
-    "SPC"         'counsel-M-x
+    "SPC" 'counsel-M-x
 
-    "bb"          'ivy-switch-buffer
+    "bb"  'ivy-switch-buffer
     
-    "fr"          'counsel-recentf
-    "ff"          'counsel-find-file
-    "fL"          'counsel-find-library
+    "fr"  'counsel-recentf
+    "ff"  'counsel-find-file
+    "fL"  'counsel-find-library
 
-    "aL"          'counsel-load-library
-    "aP"          'cousel-package
+    "aL"  'counsel-load-library
+    "aP"  'cousel-package
 
-    "T"           'counsel-load-theme
+    "T"   'counsel-load-theme
 
-    "iu"          'counsel-unicode-char)
-  (l-s 
-    "r" 'counsel-rg
-    "g" 'counsel-grep
-    "p" 'counsel-pt)
+    "iu"  'counsel-unicode-char
+
+    "r"   'counsel-rg)
+  
 
   ;; "C-x j"         'counsel-mark-ring
 
@@ -132,7 +131,7 @@
            "pt -zS --nocolor --nogroup -e %s")
           (t counsel-grep-base-command))))
     (setq counsel-grep-base-command command))
- 
+  
   (when (executable-find "rg")
     (setq counsel-git-cmd "rg --files")
     (setq counsel-rg-base-command
@@ -159,11 +158,17 @@
   (l-spc
     "ak" 'counsel-world-clock))
 
-(use-package ivy-util
-  :ensure nil
-  :general
-  (l-s
-    "i" 'cm/swiper-region-or-symbol))
+(defun cm/swiper-region-or-symbol ()
+  "Run `swiper' with the selected region or the symbol
+round point as the initial input."
+  (interactive)
+  (let ((input (if (region-active-p)
+                   (buffer-substring-no-properties
+                    (region-beginning) (region-end))
+                 (thing-at-point 'symbol t))))
+    (swiper input)))
+
+(l-spc "3" 'cm/swiper-region-or-symbol)
 
 (provide 'init-ivy)
 ;; init-ivy.el ends here

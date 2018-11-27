@@ -15,11 +15,7 @@
   (nvmap
     ;; "^" and "$" are hard to press, use emacs style key instead
     "C-a" 'evil-first-non-blank
-    "C-e" 'evil-end-of-line
-
-    ;; For leader
-    "s" nil
-    "S" 'evil-substitute)
+    "C-e" 'evil-end-of-line)
 
   (mmap
     "C-a" 'evil-first-non-blank
@@ -38,22 +34,15 @@
 
   ;; Rebound Universal arg to "SPC u"
   (l-spc
-    "u" 'universal-argument
-    ";" 'evil-ex))
+    "u" 'universal-argument))
 
 (use-package evil-snipe
-  ;; Only I want is smart f/F/t/T, `avy' will do the rest of the work
   :init
   (setq evil-snipe-smart-case t
         evil-snipe-scope 'whole-line
         evil-snipe-repeat-scope 'whole-line)
-  :general
-  (nvmap
-    "f" 'evil-snipe-f
-    "F" 'evil-snipe-F
-    "t" 'evil-snipe-t
-    "T" 'evil-snipe-T)
-  :config (evil-snipe-override-mode))
+  :hook (after-init . evil-snipe-override-mode)
+  :hook (after-init . evil-snipe-mode))
 
 (use-package evil-lion
   :general
@@ -74,15 +63,15 @@
     "gc" 'evilnc-comment-operator))
 
 (use-package evil-surround
-  :init
-  (cm/add-temp-hook 'evil-insert-state-entry-hook   (global-evil-surround-mode))
-  (cm/add-temp-hook 'evil-operator-state-entry-hook (global-evil-surround-mode)))
+  :config
+  (global-evil-surround-mode +1))
 
-;; (use-package evil-embrace
-;;   :hook (org-mode . embrace-org-mode)
-;;   :config
-;;   (setq evil-embrace-show-help-p nil)
-;;   (evil-embrace-enable-evil-surround-integration))
+(use-package evil-embrace
+  :init
+  (cm/add-temp-hook 'evil-insert-state-entry-hook
+    (evil-embrace-enable-evil-surround-integration))
+  (cm/add-temp-hook 'evil-operator-state-entry-hook
+    (evil-embrace-enable-evil-surround-integration)))
 
 ;; Undo-tree is a part of `evil'
 (use-package undo-tree

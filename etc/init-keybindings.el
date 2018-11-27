@@ -5,16 +5,18 @@
 
   ;; The global leader
   (general-create-definer l-spc :states '(n v)
-    :prefix "SPC")
+    :prefix "SPC"
+    :non-normal-prefix "M-SPC")
 
   ;; The leader for the major-mode functions
   (general-create-definer l-m :states '(n v)
-    :prefix ",")
+    :prefix ","
+    :non-normal-prefix "M-m"))
 
-  ;; The leader for just jump between the source
-  (general-create-definer l-s :states '(n v)
-    :prefix "s"))
-
+;; Keep the key bindings same to terminal
+(general-define-key "C-h" 'delete-backward-char)
+(general-define-key "M-h" 'backward-kill-word)
+(general-define-key "<f1>" 'help-command)
 
 ;; Hydra
 (use-package hydra)

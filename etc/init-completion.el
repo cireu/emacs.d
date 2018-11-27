@@ -3,7 +3,8 @@
 ;; Company
 (use-package company
   :defines (company-dabbrev-ignore-case company-dabbrev-downcase)
-  :defer 2
+  :hook ((org-mode
+          prog-mode) . global-company-mode)
   :preface
   (defvar company-enable-yas t
     "Enable yasnippet for all backends")
@@ -34,8 +35,6 @@
             "C-p" 'company-select-previous
             "C-n" 'company-select-next)
   :config
-  (global-company-mode +1)
-
   ;; Support yas in commpany
   ;; Note: Must be the last to involve all backends
   (setq company-backends (mapcar #'company-backend-with-yas company-backends)))
