@@ -19,7 +19,7 @@
         ivy-initial-inputs-alist nil
         ivy-on-del-error-function nil
 
-        ivy-height 20
+        ivy-height 17
         ivy-fixed-height-minibuffer t
         ivy-count-format "(%d/%d) "
         ivy-format-function #'ivy-format-function-arrow

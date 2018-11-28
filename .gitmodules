@@ -19,3 +19,6 @@
 [submodule "lib/site-lisp/grep-dired"]
 	path = lib/site-lisp/grep-dired
 	url = https://github.com/manateelazycat/grep-dired
+[submodule "lib/site-lisp/targets.el"]
+	path = lib/site-lisp/targets.el
+	url = https://github.com/noctuid/targets.el

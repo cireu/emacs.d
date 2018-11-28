@@ -1,5 +1,9 @@
 ;;; -*- lexical-binding:t ; -*-
 
+(defun cm/create-new-functions (&rest _)
+  "No docstring hahaah"
+  )
+
 (use-package ranger
   :defer 3
   :general
@@ -10,7 +14,7 @@
   :init
   (setq ranger-cleanup-eagerly nil
         ranger-show-hidden t
-        ranger-hide-cursor t
+        ranger-hide-cursor nil
         ranger-excluded-extensions '("mkv" "iso" "mp4")
         ranger-dont-show-binary t
         ranger-max-preview-size 10)
@@ -20,6 +24,9 @@
     (require 'ranger))
   :config
   (ranger-override-dired-mode +1))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 (provide 'init-ranger)
 ;;; init-ranger.el ends here

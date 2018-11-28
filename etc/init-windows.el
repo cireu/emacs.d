@@ -106,16 +106,13 @@
 ;;   :ensure nil
 ;;   :hook (after-init . windmove-default-keybindings))
 
-(use-package windows-funcs
+(use-package windows-utils
   :ensure nil
   :general
   (l-spc
     "w"   'hydra-window/body
     "TAB" 'cm/alternate-buffer
-    "RET" 'other-window
-    ;; Buffers
-    "bs"  'cm/switch-to-scratch-buffer
-    "bm"  'cm/switch-to-message-buffer))
+    "RET" 'other-window))
 
 (provide 'init-windows)
 ;;; init-windows.el ends here

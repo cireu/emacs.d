@@ -3,17 +3,10 @@
 ;; Company
 (use-package company
   :defines (company-dabbrev-ignore-case company-dabbrev-downcase)
-  :hook ((org-mode
-          prog-mode) . global-company-mode)
+  :defer 2
   :preface
   (defvar company-enable-yas t
     "Enable yasnippet for all backends")
-  (defun company-backend-with-yas (backend)
-    (if (or (not company-enable-yas)
-            (and (listp backend) (member 'company-yasnippet backend)))
-        backend
-      (append (if (consp backend) backend (list backend))
-              '(:with company-yasnippet))))
   :init
   (setq company-tooltip-align-annotations t ; aligns annotation to the right
         company-tooltip-limit 12            ; bigger popup window
@@ -37,6 +30,13 @@
   :config
   ;; Support yas in commpany
   ;; Note: Must be the last to involve all backends
+  (defun company-backend-with-yas (backend)
+    (if (or (not company-enable-yas)
+            (and (listp backend) (member 'company-yasnippet backend)))
+        backend
+      (append (if (consp backend) backend (list backend))
+              '(:with company-yasnippet))))
+  (global-company-mode +1)
   (setq company-backends (mapcar #'company-backend-with-yas company-backends)))
 
 (use-package company-box
@@ -110,6 +110,15 @@
           try-expand-dabbrev
           try-expand-dabbrev-all-buffers
           try-expand-dabbrev-from-kill)))
+
+;; Ayaya!
+(use-package auto-yasnippet
+  )
+
+;; Tiny expand
+(use-package tiny
+  :general
+  (""))
 
 (provide 'init-completion)
 ;;; init-completion.el ends here

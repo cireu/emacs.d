@@ -36,13 +36,18 @@
   (l-spc
     "u" 'universal-argument))
 
+;; All I need just clever F/f, `avy' will do the rest.
 (use-package evil-snipe
   :init
-  (setq evil-snipe-smart-case t
-        evil-snipe-scope 'whole-line
+  (setq evil-snipe-smart-case   t
+        evil-snipe-scope        'whole-line
         evil-snipe-repeat-scope 'whole-line)
-  :hook (after-init . evil-snipe-override-mode)
-  :hook (after-init . evil-snipe-mode))
+  :general
+  (nvmap
+    "f" 'evil-snipe-f
+    "F" 'evil-snipe-F)
+  :config (evil-snipe-override-mode +1))
+
 
 (use-package evil-lion
   :general

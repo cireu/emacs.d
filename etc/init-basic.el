@@ -34,44 +34,37 @@
     (recentf-track-opened-file)))
 
 ;; Better auto save system
-(use-package super-save
-  :ensure nil ;; Force use from site-lisp
-  :commands (super-save-mode)
-  :hook (after-init . super-save-mode)
-  :init
-  (setq save-silently t
-        super-save-auto-save-when-idle t
-        super-save-idle-duration 1
-        super-save-all-buffers t)
-  (setq auto-save-list-file-prefix (expand-file-name ".save-"
-                                                     (concat cm/cache-files-directory "/auto-save-list"))
-        auto-to-save-default nil))
+;; (use-package super-save
+;;   :ensure nil ;; Force use from site-lisp
+;;   :commands (super-save-mode)
+;;   :hook (after-init . super-save-mode)
+;;   :init
+;;   (setq save-silently t
+;;         super-save-auto-save-when-idle t
+;;         super-save-idle-duration 1
+;;         super-save-all-buffers t)
+;;   (setq auto-save-list-file-prefix (expand-file-name ".save-"
+;;                                                      (concat cm/cache-files-directory "/auto-save-list"))
+;;         auto-to-save-default nil))
+
+(use-package basic-utils
+  :general
+  (l-spc
+    "ff" 'counsel-find-file
+    "fr" 'counsel-recentf
+    "fs" 'save-buffer
+    "fS" 'evil-write-all
+    "fei" 'cm/find-emacs-init-file
+    "fed" 'cm/jump-emacs-etc-directory
+    "fel" 'cm/jump-emacs-lib-directory
+
+    "bb" 'ivy-switch-buffer
+    "bs" 'cm/switch-to-scratch-buffer
+    "bm" 'cm/switch-to-message-buffer
+
+    ";" 'eldoc-eval-expression))
 
 
-(defun cm/find-emacs-init-file ()
-  "Find my emacs init file"
-  (interactive)
-  (find-file (expand-file-name "init.el" user-emacs-directory)))
-
-(defun cm/jump-emacs-etc-directory ()
-  "Jump to my emacs etc directory"
-  (interactive)
-  (dired cm/config-files-directory))
-
-(defun cm/jump-emacs-lib-directory ()
-  "Jump to my emacs lib directory"
-  (interactive)
-  (dired cm/library-files-directory))
-
-(l-spc
-  "fs" 'save-buffer
-  "fS" 'evil-write-all
-  "fei" 'cm/find-emacs-init-file
-  "fed" 'cm/jump-emacs-etc-directory
-  "fel" 'cm/jump-emacs-lib-directory)
-
-(l-spc
-  ";" 'eldoc-eval-expression)
 
 (provide 'init-basic)
 ;;; init-basic.el ends here

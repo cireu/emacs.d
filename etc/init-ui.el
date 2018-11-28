@@ -28,7 +28,7 @@
 ;; Set up the themes
 (use-package doom-themes
   :init
-  (load-theme 'doom-city-lights)
+  (load-theme 'doom-solarized-light)
   (cm/add-temp-hook #'org-mode
     (doom-themes-org-config)))
 
