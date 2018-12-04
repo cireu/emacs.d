@@ -26,25 +26,33 @@
     :ensure nil
     :general
     (l-m :keymaps 'emacs-lisp-mode-map
-      "m" 'ielm
+      "'" 'ielm
       "ef" 'eval-defun
       "ee" 'eval-buffer))
 
-  (use-package macrostep)
-
-  (use-package elisp-util
-    :ensure nil
+  (use-package macrostep
+    :hook (macrostep-mode . evil-normalize-keymaps)
     :general
-    (l-m :keymaps 'emacs-lisp-mode-map 
-      "em" 'hydra-macrostep/body))
+    (l-m
+      :keymaps 'emacs-lisp-mode-map
+      "em"     'macrostep-expand)
+    (nmap
+      :keymaps 'macrostep-keymap
+      "e"      'macrostep-expand
+      "c"      'macrostep-collapse
+
+      "J"      'macrostep-next-macro
+      "K"      'macrostep-prev-macro
+
+      "q"      'macrostep-collapse-all)) 
 
   ;; slime-style code navigatin
   (use-package elisp-slime-nav
     :general
     (l-m
       :keymaps '(emacs-lisp-mode-map ielm-map)
-      "f" 'elisp-slime-nav-find-elisp-thing-at-point
-      "j" 'pop-tag-mark
+      "n" 'elisp-slime-nav-find-elisp-thing-at-point
+      "p" 'pop-tag-mark
       "d" 'elisp-slime-nav-describe-elisp-thing-at-point)))
 
 (provide 'init-emacs-lisp)

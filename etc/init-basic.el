@@ -48,10 +48,14 @@
 ;;         auto-to-save-default nil))
 
 (use-package basic-utils
+  :ensure nil
   :general
   (l-spc
+    "SPC" 'counsel-M-x
+    
     "ff" 'counsel-find-file
     "fr" 'counsel-recentf
+    "fj" 'dired
     "fs" 'save-buffer
     "fS" 'evil-write-all
     "fei" 'cm/find-emacs-init-file
@@ -61,10 +65,11 @@
     "bb" 'ivy-switch-buffer
     "bs" 'cm/switch-to-scratch-buffer
     "bm" 'cm/switch-to-message-buffer
+    "TAB" 'cm/alternate-buffer
 
+    "T" 'counsel-load-theme
+    
     ";" 'eldoc-eval-expression))
-
-
 
 (provide 'init-basic)
 ;;; init-basic.el ends here

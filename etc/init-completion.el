@@ -92,11 +92,7 @@
   :config
   (use-package yasnippet-snippets))
 
-(use-package yas-util
-  :ensure nil
-  :general
-  (l-spc
-    "is" 'cm/yas-expand-on-region-or-insert))
+
 
 ;; Hippie expand
 (use-package hippie-expand
@@ -111,14 +107,20 @@
           try-expand-dabbrev-all-buffers
           try-expand-dabbrev-from-kill)))
 
+;; Tiny expand
+(use-package tiny)
+
 ;; Ayaya!
 (use-package auto-yasnippet
-  )
-
-;; Tiny expand
-(use-package tiny
   :general
-  (""))
+  (imap :keymaps 'yas-minor-mode-map
+    "C-o" 'aya-open-line))
+    
+(use-package snippets-utils
+  :ensure nil
+  :general
+  (l-spc
+    "si" 'cm/yas-expand-on-region-or-insert))
 
 (provide 'init-completion)
 ;;; init-completion.el ends here

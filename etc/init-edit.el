@@ -3,7 +3,6 @@
 (prefer-coding-system 'utf-8)
 
 ;;; Miscs
-;; (setq initial-scratch-message nil)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets) ; Show path if names are same
 (setq adaptive-fill-regexp "[ t]+|[ t]*([0-9]+.|*+)[ t]*")
 (setq adaptive-fill-first-line-regexp "^* *$")
@@ -27,28 +26,25 @@
               tab-width        2
               indent-tabs-mode nil)
 
-;;; Jump and navigation
-;; Jump to wherever we can
-;; (use-package avy
-;;   :general
-;;   (l-spc
-;;     "g" 'avy-goto-line
-;;     ";" 'avy-goto-char-timer)
-;;   (nvmap
-;;     "f" 'avy-goto-char-in-line)
-;;   (mmap
-;;     "f" 'avy-goto-char-in-line)
-;;   :config
-;;   (setq avy-timeout-seconds 0.3
-;;         avy-background nil
-;;         avy-all-windows t)
-;;   (setq avy-keys '(?a ?s ?d ?f ?j ?k ?l ?\; ?w ?e ?i ?o ?v ?m))
-;;   (avy-setup-default))
+;; Auto-save
+(setq save-silently t)
+(setq auto-save-default nil
+      auto-save-list-file-prefix (expand-file-name "auto-save-list/.save-" cm/cache-files-directory))
+(run-with-idle-timer 1 t #'evil-write-all t)
 
-;; Jump between links
-;; (use-package ace-link
-;;   :general
-;;   ("M-g l" 'ace-link-addr))
+;; Jump and navigation
+(use-package avy
+  :general
+  (l-spc
+    "g" 'avy-goto-line 
+    "j" 'avy-goto-char-timer)
+  :config
+  (setq avy-timeout-seconds 0.3
+        avy-background nil
+        avy-all-windows t)
+  (setq avy-keys '(?a ?s ?d ?f ?j ?k ?l ?\; ?w ?e ?i ?o))
+  (avy-setup-default))
+
 
 ;;; Region Operation
 ;; Expand-region

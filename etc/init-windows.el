@@ -111,7 +111,6 @@
   :general
   (l-spc
     "w"   'hydra-window/body
-    "TAB" 'cm/alternate-buffer
     "RET" 'other-window))
 
 (provide 'init-windows)

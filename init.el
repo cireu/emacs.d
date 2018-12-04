@@ -81,7 +81,7 @@
 ;; (cm/load init-python)
 
 ;; ;; Chinese language support
-;; (cm/load init-chinese)
+(cm/load init-chinese)
 
 ;; ;; File-managemnet
 (cm/load init-ranger)

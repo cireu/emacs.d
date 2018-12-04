@@ -30,6 +30,7 @@
     "C-p" 'previous-line
     "C-d" 'delete-char
     "C-y" 'yank
+    "C-o" 'open-line
     "C-k" 'kill-line)
 
   ;; Rebound Universal arg to "SPC u"

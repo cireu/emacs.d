@@ -46,7 +46,8 @@
 (use-package ivy-hydra
   :preface
   ;; use `hydra-ivy/body' automatically in some ivy-based functions
-  (defvar cm/ivy-auto-enable-hydra-list '(ivy-switch-buffer
+  (defvar cm/ivy-auto-enable-hydra-list '(counsel-yank-pop
+                                          ivy-switch-buffer
                                           counsel-recentf
                                           cm/swiper-region-or-symbol))
   ;; FIXME Force `ivy-hydra' exit when quit minibuffer
@@ -68,60 +69,21 @@
   :general
   ("C-s" 'swiper)
   (l-s
-    "s" 'swiper)
+   "s" 'swiper)
   (:keymaps 'swiper-map
             "M-q" 'swiper-query-replace)
   :config
   (setq swiper-action-recenter t))
 
+;; Counsel
 (use-package counsel
+  ;; Start follow `ivy-mode'
+  :hook (ivy-mode . counsel-mode)
   :general
   ([remap swiper] 'counsel-grep-or-swiper)
-  (l-spc                   
-    "SPC" 'counsel-M-x
-
-    "bb"  'ivy-switch-buffer
-    
-    "fr"  'counsel-recentf
-    "ff"  'counsel-find-file
-    "fL"  'counsel-find-library
-
-    "aL"  'counsel-load-library
-    "aP"  'cousel-package
-
-    "T"   'counsel-load-theme
-
-    "iu"  'counsel-unicode-char
-
-    "r"   'counsel-rg)
-  
-
-  ;; "C-x j"         'counsel-mark-ring
-
-  ;; "C-c c L"       'counsel-load-library
-  ;; "C-c c P"       'counsel-package
-  ;; "C-c c a"       'counsel-apropos
-  ;; "C-c c e"       'counsel-colors-emacs
-  ;; "C-c c f"       'counsel-find-library
-  ;; "C-c c g"       'counsel-grep
-  ;; "C-c c h"       'counsel-command-history
-  ;; "C-c c i"       'counsel-git
-  ;; "C-c c j"       'counsel-git-grep
-  ;; "C-c c l"       'counsel-locate
-  ;; "C-c c m"       'counsel-minibuffer-history
-  ;; "C-c c o"       'counsel-outline
-  ;; "C-c c p"       'counsel-pt
-  ;; "C-c c r"       'counsel-rg
-  ;; "C-c c s"       'counsel-ag
-  ;; "T"       'counsel-load-theme
-  ;; "iu"       'counsel-unicode-char
-  ;; "C-c c w"       'counsel-colors-web
-  ;; "C-c c z"       'counsel-fzf
-  :hook (ivy-mode . counsel-mode)
+  (l-spc
+    "r" 'counsel-rg)
   :config
-  (setq counsel-find-file-at-point t)
-  (setq counsel-yank-pop-separator "\n-------\n")
-
   ;; Use faster search tools: ripgrep or the silver search
   (let ((command
          (cond
@@ -158,17 +120,16 @@
   (l-spc
     "ak" 'counsel-world-clock))
 
-(defun cm/swiper-region-or-symbol ()
-  "Run `swiper' with the selected region or the symbol
-round point as the initial input."
-  (interactive)
-  (let ((input (if (region-active-p)
-                   (buffer-substring-no-properties
-                    (region-beginning) (region-end))
-                 (thing-at-point 'symbol t))))
-    (swiper input)))
+;; (defun cm/swiper-region-or-symbol ()
+;;   "Run `swiper' with the selected region or the symbol
+;; round point as the initial input."
+;;   (interactive)
+;;   (let ((input (if (region-active-p)
+;;                    (buffer-substring-no-properties
+;;                     (region-beginning) (region-end))
+;;                  (thing-at-point 'symbol t))))
+;;     (swiper input)))
 
-(l-spc "3" 'cm/swiper-region-or-symbol)
 
 (provide 'init-ivy)
 ;; init-ivy.el ends here

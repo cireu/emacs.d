@@ -25,8 +25,7 @@ current window."
     (switch-to-buffer
      (cl-find-if (lambda (buffer)
                    (not (eq buffer current-buffer)))
-                 (mapcar #'car (window-prev-buffers window)))
-     nil t)))
+                 (mapcar #'car (window-prev-buffers window))) nil t)))
 
 (defun cm/switch-to-scratch-buffer ()
   "Switch to the `*scratch*' buffer. Create it first if needed."
