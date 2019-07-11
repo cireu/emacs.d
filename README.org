@@ -1,1 +1,3 @@
 #emacs.d
+
+https://framagit.org/citreu/emacs.d for newest.
